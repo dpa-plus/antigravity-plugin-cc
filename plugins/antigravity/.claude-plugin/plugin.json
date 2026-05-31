@@ -1,0 +1,19 @@
+{
+  "name": "antigravity",
+  "version": "0.1.0",
+  "description": "Delegate to and review with Google's Antigravity CLI (agy / Gemini 3) without leaving Claude Code.",
+  "author": {
+    "name": "Idun Labs",
+    "url": "https://idunplatform.com"
+  },
+  "homepage": "https://github.com/Idun-Group/antigravity-plugin-cc",
+  "license": "MIT",
+  "keywords": [
+    "antigravity",
+    "agy",
+    "gemini-3",
+    "claude-code",
+    "code-review",
+    "delegation"
+  ]
+}

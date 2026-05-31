@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: test (node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["18", "20", "22"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Run tests (no external deps, no auth needed)
+        run: node --test tests/*.test.mjs
+
+  validate-manifests:
+    name: validate plugin manifests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate JSON manifests parse
+        run: |
+          node -e "JSON.parse(require('fs').readFileSync('.claude-plugin/marketplace.json','utf8')); console.log('marketplace.json OK')"
+          node -e "JSON.parse(require('fs').readFileSync('plugins/antigravity/.claude-plugin/plugin.json','utf8')); console.log('plugin.json OK')"
+      - name: Check every command/agent/skill file has YAML frontmatter
+        run: |
+          fail=0
+          for f in plugins/antigravity/commands/*.md plugins/antigravity/agents/*.md $(find plugins/antigravity/skills -name SKILL.md); do
+            head -1 "$f" | grep -q '^---$' || { echo "MISSING frontmatter: $f"; fail=1; }
+          done
+          exit $fail

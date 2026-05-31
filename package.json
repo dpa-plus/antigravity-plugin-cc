@@ -1,0 +1,30 @@
+{
+  "name": "antigravity-plugin-cc",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Use Google Antigravity (agy / Gemini 3) from inside Claude Code: delegate, review, and pair across models.",
+  "license": "MIT",
+  "author": "Idun Labs (https://idunplatform.com)",
+  "homepage": "https://github.com/Idun-Group/antigravity-plugin-cc",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Idun-Group/antigravity-plugin-cc.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "antigravity": "node plugins/antigravity/scripts/antigravity.mjs"
+  },
+  "keywords": [
+    "antigravity",
+    "agy",
+    "gemini-3",
+    "claude-code",
+    "plugin",
+    "code-review",
+    "agent-delegation"
+  ]
+}
