@@ -1,5 +1,9 @@
 # 🛰️ antigravity-plugin-cc
 
+<p align="center">
+  <img src="./assets/banner.png" alt="Claude Code × Antigravity — drive Google's agy CLI (Gemini 3) without leaving Claude Code" width="100%">
+</p>
+
 > Drive Google's Antigravity CLI (`agy`, powered by Gemini 3) without leaving Claude Code.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
