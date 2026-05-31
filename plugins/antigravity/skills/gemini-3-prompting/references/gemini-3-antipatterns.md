@@ -1,12 +1,12 @@
-# Gemini 3 prompting anti-patterns (Antigravity print mode)
+# Gemini 3.5 prompting anti-patterns (Antigravity print mode)
 
-The mistakes that waste a delegate run, and how to fix each. Grounded in Google's Gemini 3 prompting guidance and the realities of `agy` print mode.
+The mistakes that waste a delegate run, and how to fix each. Grounded in Google's Gemini 3.5 prompting guidance and the realities of `agy` print mode.
 
 ---
 
 ### 1. Vague goal
 
-**Mistake:** "Clean up the auth code" / "make this better." Gemini 3 follows instructions literally — give it a fuzzy goal and you get a confident, fuzzy change you then have to undo.
+**Mistake:** "Clean up the auth code" / "make this better." Gemini 3.5 follows instructions literally — give it a fuzzy goal and you get a confident, fuzzy change you then have to undo.
 
 **Fix:** State one concrete outcome. "Extract the duplicated email validation in the three handlers into one shared function, behavior unchanged."
 
@@ -22,7 +22,7 @@ The mistakes that waste a delegate run, and how to fix each. Grounded in Google'
 
 ### 3. Over-stuffed context
 
-**Mistake:** Pasting whole files, long history, and three tangents "for context." Gemini 3 handles long context well, but the real ask gets buried and the model optimizes for the wrong thing.
+**Mistake:** Pasting whole files, long history, and three tangents "for context." Gemini 3.5 handles long context well, but the real ask gets buried and the model optimizes for the wrong thing.
 
 **Fix:** Include only what's needed. Point at files by path ("where to look: src/auth/login.ts") instead of pasting them — the agent can read the repo. Put the material first and the instruction last.
 
@@ -30,7 +30,7 @@ The mistakes that waste a delegate run, and how to fix each. Grounded in Google'
 
 ### 4. Critical constraints buried at the top
 
-**Mistake:** Opening with "don't touch the public API" then writing 30 lines of detail. In a long prompt, Gemini 3 can drop a negative or quantitative constraint that appears too early.
+**Mistake:** Opening with "don't touch the public API" then writing 30 lines of detail. In a long prompt, Gemini 3.5 can drop a negative or quantitative constraint that appears too early.
 
 **Fix:** Put the most important restrictions — especially "do NOT change X" — as the **final** lines of the prompt, where they anchor the model's last reasoning step.
 
@@ -38,7 +38,7 @@ The mistakes that waste a delegate run, and how to fix each. Grounded in Google'
 
 ### 5. Asking for a model flag that doesn't exist
 
-**Mistake:** "Use Gemini 3 Pro for this," or expecting a `-m` / `--model` flag. There is none. The model is chosen with `/model` inside the `agy` TUI and persisted in settings.
+**Mistake:** "Use Gemini 3.5 Pro for this," or expecting a `-m` / `--model` flag. There is none. The model is chosen with `/model` inside the `agy` TUI and persisted in settings.
 
 **Fix:** Don't put model selection in the task. If a heavier model is needed, the user changes it once with `/model` in `agy`; delegate runs then use that setting.
 

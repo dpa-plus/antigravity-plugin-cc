@@ -1,5 +1,5 @@
 ---
-description: Check whether the Antigravity CLI (agy, Gemini 3) is installed and signed in, and install it if it's missing.
+description: Check whether the Antigravity CLI (agy, Gemini 3.5) is installed and signed in, and install it if it's missing.
 argument-hint: '[--json]'
 allowed-tools: Bash(node:*), Bash(curl:*), Bash(bash:*), AskUserQuestion
 ---

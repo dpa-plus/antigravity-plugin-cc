@@ -14,7 +14,7 @@ Internal contract for the `antigravity:antigravity-pair` subagent. Not user-faci
 node "${CLAUDE_PLUGIN_ROOT}/scripts/antigravity.mjs" delegate "<task>" [flags]
 ```
 
-`delegate` hands the task to Google's Antigravity CLI (`agy`, Gemini 3) non-interactively via `agy -p`. It is **write-capable by default** — it can edit files and run commands in this repo. Contain it with `--read-only` or `--sandbox` when the task should not mutate the working tree.
+`delegate` hands the task to Google's Antigravity CLI (`agy`, Gemini 3.5) non-interactively via `agy -p`. It is **write-capable by default** — it can edit files and run commands in this repo. Contain it with `--read-only` or `--sandbox` when the task should not mutate the working tree.
 
 ## The one rule: thin forwarder
 

@@ -9,7 +9,7 @@
 ## What `agy` is
 
 The **Antigravity CLI** (binary: **`agy`**) is the terminal surface of Google
-Antigravity 2.0, powered by the Gemini 3 agent harness. It shares config, auth,
+Antigravity 2.0, powered by the Gemini 3.5 agent harness. It shares config, auth,
 and the agent core with the Antigravity IDE. It descends from Gemini CLI — config
 lives under `~/.gemini/antigravity-cli/`.
 

@@ -1,10 +1,10 @@
 ---
-description: Hand a task to Antigravity (Gemini 3) and get the result back inside Claude Code.
-argument-hint: "[--background|--wait] [--sandbox|--read-only] [--continue] [--conversation <id>] [--add-dir <path>] [what Antigravity (Gemini 3) should build, investigate, or fix]"
+description: Hand a task to Antigravity (Gemini 3.5) and get the result back inside Claude Code.
+argument-hint: "[--background|--wait] [--sandbox|--read-only] [--continue] [--conversation <id>] [--add-dir <path>] [what Antigravity (Gemini 3.5) should build, investigate, or fix]"
 allowed-tools: AskUserQuestion, Agent
 ---
 
-Hand the user's task to Antigravity (Gemini 3) via the `antigravity:antigravity-pair` subagent, and show them exactly what came back.
+Hand the user's task to Antigravity (Gemini 3.5) via the `antigravity:antigravity-pair` subagent, and show them exactly what came back.
 
 The user's full request is:
 
@@ -25,9 +25,9 @@ $ARGUMENTS
 
 ## Things to surface to the user (only when relevant)
 
-- `delegate` is **write-capable by default** — Gemini 3 can edit files and run commands. For a contained, look-but-don't-touch run, point out `--read-only` (or `--sandbox`).
+- `delegate` is **write-capable by default** — Gemini 3.5 can edit files and run commands. For a contained, look-but-don't-touch run, point out `--read-only` (or `--sandbox`).
 - A follow-up like "continue", "resume", or "keep going" on the same thread can pass `--continue` (or `--conversation <id>` to target a specific conversation).
 - If the companion reports that `agy` is missing or you're not signed in, tell the user to run `/antigravity:setup` first.
-- Once the output is back, use the `antigravity-result-handling` skill to interpret it — if Gemini 3 edited files, verify the changes with `git diff`; if it returned a quota or auth error, relay it clearly instead of treating the empty result as success.
+- Once the output is back, use the `antigravity-result-handling` skill to interpret it — if Gemini 3.5 edited files, verify the changes with `git diff`; if it returned a quota or auth error, relay it clearly instead of treating the empty result as success.
 
 Built by Idun Labs.

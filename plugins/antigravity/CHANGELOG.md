@@ -8,7 +8,7 @@ Initial release.
 
 ### Added
 - `/antigravity:setup` — detect the `agy` binary, version, and auth state; offer to install if missing.
-- `/antigravity:delegate` — hand a task to Antigravity (Gemini 3) via the `antigravity-pair` subagent; foreground or `--background`.
+- `/antigravity:delegate` — hand a task to Antigravity (Gemini 3.5) via the `antigravity-pair` subagent; foreground or `--background`.
 - `/antigravity:review` — get a read-only, cross-model code review of your current diff (or a branch via `--base <ref>`).
 - `/antigravity:resume` — continue the most recent Antigravity conversation, or a specific one with `--conversation <id>`.
 - `/antigravity:status`, `/antigravity:result`, `/antigravity:cancel` — manage background jobs.

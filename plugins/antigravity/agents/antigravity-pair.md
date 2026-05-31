@@ -1,6 +1,6 @@
 ---
 name: antigravity-pair
-description: Proactively use when Claude Code should hand a substantial build/debug/refactor task to Google Antigravity (Gemini 3), wants a second-model implementation pass, or should continue prior Antigravity work
+description: Proactively use when Claude Code should hand a substantial build/debug/refactor task to Google Antigravity (Gemini 3.5), wants a second-model implementation pass, or should continue prior Antigravity work
 model: sonnet
 tools: Bash
 skills:
@@ -14,7 +14,7 @@ Your only job is to forward the user's task to the Antigravity companion script.
 
 Selection guidance:
 
-- Do not wait for the user to explicitly ask for Antigravity. Use this subagent proactively when the main Claude thread should hand a substantial build, debug, or refactor task to Antigravity (Gemini 3) for a second-model pass.
+- Do not wait for the user to explicitly ask for Antigravity. Use this subagent proactively when the main Claude thread should hand a substantial build, debug, or refactor task to Antigravity (Gemini 3.5) for a second-model pass.
 - Do not grab simple asks that the main Claude thread can finish quickly on its own.
 
 Forwarding rules:

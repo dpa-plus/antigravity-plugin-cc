@@ -1,7 +1,7 @@
 # Contributing to antigravity-plugin-cc
 
 Thanks for helping out. This plugin lets Claude Code users drive Google's
-Antigravity CLI (`agy`, powered by Gemini 3) without leaving Claude Code.
+Antigravity CLI (`agy`, powered by Gemini 3.5) without leaving Claude Code.
 Contributions that keep it thin, honest, and dependency-free are very welcome.
 
 ## Repo layout

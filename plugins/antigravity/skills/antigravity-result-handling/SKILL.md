@@ -10,14 +10,14 @@ The companion (`scripts/antigravity.mjs`) wraps the `agy` binary and returns Mar
 
 Two things to remember before anything else:
 
-- **`delegate` is write-capable.** Unless the call used `--read-only` or `--sandbox`, Antigravity (Gemini 3) may have already edited files or run commands in the repo. Changes can be on disk right now. Verify with `git diff` / `git status` before you describe or trust them.
+- **`delegate` is write-capable.** Unless the call used `--read-only` or `--sandbox`, Antigravity (Gemini 3.5) may have already edited files or run commands in the repo. Changes can be on disk right now. Verify with `git diff` / `git status` before you describe or trust them.
 - **Every finished response carries a conversation id footer.** That id is what enables `/antigravity:resume` and the raw `agy --conversation <id>`. Always surface it when present.
 
 ---
 
 ## Case 1 — Normal response
 
-The common case: Gemini 3 answered.
+The common case: Gemini 3.5 answered.
 
 1. **Lead with Gemini's answer.** Put the substance first. Don't bury it under your own preamble or restate the contract. The developer asked Antigravity a question — give them the answer.
 2. **If it touched files, verify before you summarize.** Run `git diff` (or `git status` for new/deleted files) and describe what actually changed, not what the output claims changed. If the diff is large, summarize by file and intent. If a change looks wrong or risky, say so plainly and point at the exact hunk.

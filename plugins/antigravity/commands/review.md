@@ -1,10 +1,10 @@
 ---
-description: Cross-model code review of your changes by Gemini 3 (read-only, contained).
+description: Cross-model code review of your changes by Gemini 3.5 (read-only, contained).
 argument-hint: "[--base <ref>] [--background] [focus text]"
 allowed-tools: Bash(node:*)
 ---
 
-Get a second pair of eyes on your work. This runs a **read-only** review of your current changes through Antigravity (Gemini 3) and brings the findings straight back into Claude Code. It is sandboxed — it reads the diff and reports, it never edits files or runs commands against your tree.
+Get a second pair of eyes on your work. This runs a **read-only** review of your current changes through Antigravity (Gemini 3.5) and brings the findings straight back into Claude Code. It is sandboxed — it reads the diff and reports, it never edits files or runs commands against your tree.
 
 Run the companion and present its output:
 
@@ -35,4 +35,4 @@ Then show the review verbatim, then add a one-line summary of the most important
 - Antigravity is in preview with a quota. If the review comes back empty, you're likely rate-limited — the companion surfaces the reset time when it can. Wait it out and rerun.
 - First time? You need to be signed in to Antigravity once. Run `/antigravity:setup` to check, and if it reports you're not authed, type `! agy` to do the one-time Google OAuth in your browser.
 
-_Powered by Google Antigravity (`agy`, Gemini 3). Plugin by Idun Labs._
+_Powered by Google Antigravity (`agy`, Gemini 3.5). Plugin by Idun Labs._

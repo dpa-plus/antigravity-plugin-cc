@@ -1,17 +1,17 @@
 # 🛰️ antigravity-plugin-cc
 
 <p align="center">
-  <img src="./assets/banner.png" alt="Claude Code × Antigravity — drive Google's agy CLI (Gemini 3) without leaving Claude Code" width="100%">
+  <img src="./assets/banner.png" alt="Claude Code × Antigravity — drive Google's agy CLI (Gemini 3.5) without leaving Claude Code" width="100%">
 </p>
 
-> Drive Google's Antigravity CLI (`agy`, powered by Gemini 3) without leaving Claude Code.
+> Drive Google's Antigravity CLI (`agy`, powered by Gemini 3.5) without leaving Claude Code.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
 [![Built by Idun Labs](https://img.shields.io/badge/built%20by-Idun%20Labs-6E56CF.svg)](https://github.com/Idun-Group)
-[![Powered by agy / Gemini 3](https://img.shields.io/badge/powered%20by-agy%20%2F%20Gemini%203-4285F4.svg)](https://antigravity.google/docs/cli-overview)
+[![Powered by agy / Gemini 3.5](https://img.shields.io/badge/powered%20by-agy%20%2F%20Gemini%203.5-4285F4.svg)](https://antigravity.google/docs/cli-overview)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Idun-Group/antigravity-plugin-cc/pulls)
 
-A Claude Code plugin that hands work to `agy` — Google's Antigravity CLI — and brings the result back into your session. You stay in Claude Code; Gemini 3 becomes a second model on tap. Think of it as the Antigravity counterpart to [`openai/codex-plugin-cc`](https://github.com/openai/codex-plugin-cc).
+A Claude Code plugin that hands work to `agy` — Google's Antigravity CLI — and brings the result back into your session. You stay in Claude Code; Gemini 3.5 becomes a second model on tap. Think of it as the Antigravity counterpart to [`openai/codex-plugin-cc`](https://github.com/openai/codex-plugin-cc).
 
 ---
 
@@ -20,7 +20,7 @@ A Claude Code plugin that hands work to `agy` — Google's Antigravity CLI — a
 Seven slash commands, all under the `/antigravity:` namespace. Each one shells out to a small Node companion that wraps `agy` in headless (`-p`) mode and manages background jobs.
 
 - **`/antigravity:setup`** — check that `agy` is installed, find its binary and version, and get a best-effort read on whether you're signed in. Never logs you in.
-- **`/antigravity:delegate`** — hand a task to Gemini 3. Write-capable by default; can be sandboxed or made read-only, and can run in the background.
+- **`/antigravity:delegate`** — hand a task to Gemini 3.5. Write-capable by default; can be sandboxed or made read-only, and can run in the background.
 - **`/antigravity:review`** — read-only cross-model review of your current diff (or `base...HEAD`). Sandboxed.
 - **`/antigravity:resume`** — continue the most recent Antigravity conversation (or a specific one) with a follow-up.
 - **`/antigravity:status`** — list background jobs for this repo, or inspect one.
@@ -35,7 +35,7 @@ You already trust Claude Code for the loop you're in. Sometimes you want a diffe
 
 This plugin makes that one slash command away:
 
-- **Second opinion.** `/antigravity:review` sends your diff to Gemini 3 and reads its critique back. Different model, different blind spots — useful precisely because it isn't the model that wrote the code.
+- **Second opinion.** `/antigravity:review` sends your diff to Gemini 3.5 and reads its critique back. Different model, different blind spots — useful precisely because it isn't the model that wrote the code.
 - **Second pair of hands.** `/antigravity:delegate` offloads a self-contained task (a refactor, a script, a migration) to `agy` while you keep working. Run it in the background and collect the result later.
 - **Separate quota.** `agy` runs on your own local Antigravity auth and its own free-preview quota. Offloading to it doesn't draw down your Claude Code usage.
 
@@ -94,11 +94,11 @@ Cross-model review of your working tree. Read-only and sandboxed — `agy` reads
 /antigravity:review --base main the auth refactor in this branch
 ```
 
-Returns Gemini 3's review of the embedded diff. Pair it with your own review for two models on one change.
+Returns Gemini 3.5's review of the embedded diff. Pair it with your own review for two models on one change.
 
 ### `/antigravity:delegate` ⭐
 
-Hand a task to Gemini 3. Write-capable by default — it can edit files and run commands — so contain it when you want to.
+Hand a task to Gemini 3.5. Write-capable by default — it can edit files and run commands — so contain it when you want to.
 
 ```text
 /antigravity:delegate add a --json flag to the export command and update the tests

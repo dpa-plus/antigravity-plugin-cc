@@ -1,27 +1,27 @@
 ---
 name: gemini-3-prompting
-description: "How to write effective prompts for Google Antigravity / Gemini 3 agents (used when delegating to or reviewing with the antigravity plugin)"
+description: "How to write effective prompts for Google Antigravity / Gemini 3.5 agents (used when delegating to or reviewing with the antigravity plugin)"
 ---
 
-# Prompting Gemini 3 through Antigravity
+# Prompting Gemini 3.5 through Antigravity
 
-You drive `agy` (Antigravity, Gemini 3) in print mode through the companion's `delegate`, `review`, and `resume` subcommands. Print mode is headless: one prompt in, one result out. The agent cannot stop to ask you a clarifying question, so the prompt you send is the whole brief. Write it like a work order for a fast, literal junior engineer.
+You drive `agy` (Antigravity, Gemini 3.5) in print mode through the companion's `delegate`, `review`, and `resume` subcommands. Print mode is headless: one prompt in, one result out. The agent cannot stop to ask you a clarifying question, so the prompt you send is the whole brief. Write it like a work order for a fast, literal junior engineer.
 
 This guide is the short version. The depth lives in two reference files:
 - **[Recipes](references/gemini-3-recipes.md)** — copy-paste templates for fixes, features, review, investigation, refactor, and tests.
 - **[Anti-patterns](references/gemini-3-antipatterns.md)** — the common mistakes and their fixes.
 
-## How Gemini 3 behaves (and how to prompt for it)
+## How Gemini 3.5 behaves (and how to prompt for it)
 
-Based on Google's Gemini 3 developer/prompting guides and practitioner write-ups:
+Based on Google's Gemini 3.5 developer/prompting guides and practitioner write-ups:
 
 - **It follows instructions literally.** If you say "fix the bug," it fixes *a* bug its own way. If you say "make `parseDate` return `null` on empty input and add a test for it," you get exactly that. Spell out the target behavior, not the vibe.
-- **It is terse by default.** Gemini 3 gives direct answers and skips narration unless you ask for it. If you want a written plan or an explanation of the change, request it explicitly.
+- **It is terse by default.** Gemini 3.5 gives direct answers and skips narration unless you ask for it. If you want a written plan or an explanation of the change, request it explicitly.
 - **It plans and reasons over multiple steps.** It is strong at decomposing a goal into steps and executing them. Give it the *goal* and the *constraints*; let it own the *how*. Over-scripting the steps fights the model.
-- **It handles long context well, but cares about order.** Put the data/code/diff first, then your instruction last. Anchor the ask to the material ("Based on the diff above, ..."). Critical constraints — especially "do NOT touch X" — go at the **end** of the prompt; Gemini 3 can drop a negative constraint that appears too early in a long prompt.
+- **It handles long context well, but cares about order.** Put the data/code/diff first, then your instruction last. Anchor the ask to the material ("Based on the diff above, ..."). Critical constraints — especially "do NOT touch X" — go at the **end** of the prompt; Gemini 3.5 can drop a negative constraint that appears too early in a long prompt.
 - **One markup style, used consistently.** Markdown headings or simple labels are enough. Don't mix XML tags and Markdown in the same prompt.
 
-You do **not** pick the model in the prompt. There is no model flag on `agy` — the model is set with `/model` inside the TUI and persisted. Never instruct the agent to "use Gemini 3 Pro" or pass `-m`.
+You do **not** pick the model in the prompt. There is no model flag on `agy` — the model is set with `/model` inside the TUI and persisted. Never instruct the agent to "use Gemini 3.5 Pro" or pass `-m`.
 
 ## A solid delegate prompt has five parts
 
