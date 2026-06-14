@@ -10,3 +10,5 @@ coverage/
 # keep test fixtures even though they are .log
 !tests/fixtures/
 !tests/fixtures/*.log
+
+package-lock.json
