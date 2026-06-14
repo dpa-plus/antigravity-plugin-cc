@@ -19,6 +19,7 @@ import {
   spawnBackground,
   goDurationToMs,
   agyVersion,
+  agySupportsModel,
   readLogSafe,
 } from "./lib/agy.mjs";
 import { scanAgyLog } from "./lib/logscan.mjs";
@@ -142,11 +143,17 @@ function runAgyTask(parsed, { kind, title, prompt, readOnly, resume }) {
   const printTimeout = parsed.valued["print-timeout"] || "10m";
   const addDirs = [cwd, ...(parsed.repeated["add-dir"] || [])];
 
+  // --model: agy 1.0.8+ accepts --model <label>; older builds don't. Probe once and
+  // pass it through when supported, otherwise warn and let agy use its settings model.
+  let resolvedModel = null;
   if (parsed.valued.model) {
-    // agy has no model flag; warn but continue. (See docs/antigravity-cli-reference.md)
-    process.stderr.write(
-      "[antigravity-plugin-cc] note: agy has no --model flag; set the default model with /model inside agy. Ignoring --model.\n",
-    );
+    if (agySupportsModel(bin.path)) {
+      resolvedModel = parsed.valued.model;
+    } else {
+      process.stderr.write(
+        "[antigravity-plugin-cc] note: this agy build has no --model flag; ignoring --model. Pick the model with /model inside agy.\n",
+      );
+    }
   }
 
   const finalPrompt = clampPrompt(prompt);
@@ -158,6 +165,7 @@ function runAgyTask(parsed, { kind, title, prompt, readOnly, resume }) {
     addDirs,
     yolo,
     sandbox,
+    model: resolvedModel,
     continueLast,
     conversationId,
     logFile: job.paths.log,
@@ -204,8 +212,10 @@ function runAgyTask(parsed, { kind, title, prompt, readOnly, resume }) {
     return;
   }
 
-  job.status = scan.error ? "failed" : "done";
-  job.error = scan.error ? scan.error.message : null;
+  // Empty stdout, no timeout: either a recognized backend error (quota/auth/...) or a
+  // genuinely empty result. Both are FAILURES — never report empty output as success.
+  job.status = "failed";
+  job.error = scan.error ? scan.error.message : "Antigravity returned no output (no error found in the log).";
   writeJob(job);
   out(render.renderError(scan.error, { title, conversationId: job.conversationId, logFile: job.paths.log }));
 }
