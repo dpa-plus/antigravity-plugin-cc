@@ -1,0 +1,116 @@
+I0614 13:27:39.732484 65164 server.go:1318] Starting language server process with pid 65164
+I0614 13:27:39.733184 65164 server.go:491] Language server will attempt to listen on host localhost
+I0614 13:27:39.733927 65164 server.go:505] Language server listening on random port at 54336 for HTTPS (gRPC)
+I0614 13:27:39.734188 65164 server.go:512] Language server listening on random port at 54337 for HTTP
+W0614 13:27:42.319232 65164 launchmanager.go:69] Entering local chrome mode! This is WRONG unless you are running tests or in eval mode on Linux.
+I0614 13:27:42.321219 65164 manager.go:93] Creating trajectory store manager with proto store and SQLite store
+E0614 13:27:42.322438 65164 log.go:398] Failed to poll ListExperiments: error getting token source: You are not logged into Antigravity.
+W0614 13:27:42.323054 65164 log_context.go:117] Cache(loadCodeAssistResponse): Singleflight refresh failed: error getting token source: You are not logged into Antigravity.
+E0614 13:27:42.323096 65164 log.go:398] error getting token source: You are not logged into Antigravity.
+W0614 13:27:42.323294 65164 log_context.go:117] Cache(availableModels): Singleflight refresh failed: failed to get load code assist response: error getting token source: You are not logged into Antigravity.
+E0614 13:27:42.323318 65164 log.go:398] failed to get load code assist response: error getting token source: You are not logged into Antigravity.
+E0614 13:27:42.323733 65164 log.go:398] Failed to poll FetchAvailableModels: failed to get load code assist response: error getting token source: You are not logged into Antigravity.
+W0614 13:27:42.323937 65164 log_context.go:117] Cache(loadCodeAssistResponse): Singleflight refresh failed: error getting token source: You are not logged into Antigravity.
+E0614 13:27:42.323964 65164 log.go:398] error getting token source: You are not logged into Antigravity.
+W0614 13:27:42.324148 65164 log_context.go:117] Cache(userInfo): Singleflight refresh failed: failed to get load code assist response: error getting token source: You are not logged into Antigravity.
+E0614 13:27:42.324252 65164 log.go:398] failed to get load code assist response: error getting token source: You are not logged into Antigravity.
+E0614 13:27:42.324562 65164 server.go:630] Failed to get OAuth token: error getting token source from auth provider: You are not logged into Antigravity.
+W0614 13:27:42.324574 65164 client.go:82] failed to set auth token
+I0614 13:27:42.326731 65164 server.go:2326] Auth succeeded, refreshing features and managers
+E0614 13:27:42.326760 65164 log.go:398] Failed to poll ListExperiments: error getting token source: You are not logged into Antigravity.
+W0614 13:27:42.326865 65164 log_context.go:117] Cache(loadCodeAssistResponse): Singleflight refresh failed: error getting token source: You are not logged into Antigravity.
+E0614 13:27:42.326876 65164 log.go:398] error getting token source: You are not logged into Antigravity.
+W0614 13:27:42.326992 65164 log_context.go:117] Cache(availableModels): Singleflight refresh failed: failed to get load code assist response: error getting token source: You are not logged into Antigravity.
+E0614 13:27:42.327001 65164 log.go:398] failed to get load code assist response: error getting token source: You are not logged into Antigravity.
+E0614 13:27:42.327124 65164 log.go:398] Failed to poll FetchAvailableModels: failed to get load code assist response: error getting token source: You are not logged into Antigravity.
+I0614 13:27:42.327235 65164 server.go:2332] State refresh took 0ms
+I0614 13:27:42.327243 65164 server.go:2445] [RemoteControl] Resolved proxyServerURL: ""
+I0614 13:27:42.327418 65164 server.go:1972] initialized server successfully in 2.594761625s
+W0614 13:27:42.327536 65164 log_context.go:117] Cache(loadCodeAssistResponse): Singleflight refresh failed: error getting token source: You are not logged into Antigravity.
+E0614 13:27:42.327557 65164 log.go:398] error getting token source: You are not logged into Antigravity.
+W0614 13:27:42.327690 65164 log_context.go:117] Cache(userInfo): Singleflight refresh failed: failed to get load code assist response: error getting token source: You are not logged into Antigravity.
+E0614 13:27:42.327713 65164 log.go:398] failed to get load code assist response: error getting token source: You are not logged into Antigravity.
+E0614 13:27:42.327877 65164 server.go:630] Failed to get OAuth token: error getting token source from auth provider: You are not logged into Antigravity.
+W0614 13:27:42.327909 65164 client.go:82] failed to set auth token
+E0614 13:27:42.327909 65164 server.go:630] Failed to get OAuth token: error getting token source from auth provider: You are not logged into Antigravity.
+W0614 13:27:42.327925 65164 client.go:82] failed to set auth token
+I0614 13:27:42.329138 65164 auto_updater.go:253] Spawned background update process with PID 65184
+I0614 13:27:42.329224 65164 common.go:106] Launching CLI mode
+E0614 13:27:42.329248 65164 common.go:125] Failed to resolve GeminiDir ".gemini": .gemini must be an absolute path: path is not absolute, falling back to default
+I0614 13:27:42.329263 65164 common.go:156] CLI app data directory: /home/dev/.gemini/antigravity-cli
+I0614 13:27:42.329292 65164 server.go:210] Creating CLI server backend: product=antigravity workspaceDirs=[/home/dev/project] appDataDir=/home/dev/.gemini/antigravity-cli cascadeManager=true codeAssist=true
+I0614 13:27:42.329916 65164 project.go:162] project: discovered project "/home/dev/project" (id=11111111-1111-4111-8111-111111111111) via cache
+I0614 13:27:42.329930 65164 server.go:1357] Backend project ID updated dynamically to: 11111111-1111-4111-8111-111111111111
+I0614 13:27:42.331352 65164 printmode.go:85] Print mode: starting (promptLength=29, model="", conversationID="")
+I0614 13:27:42.331368 65164 manager.go:303] Initializing CLI store manager for workspace /home/dev/project
+I0614 13:27:42.332293 65164 cli_setting_manager.go:134] applyUserSettings: stored shared config permissions: allow=6 deny=0 ask=0 from /home/dev/.gemini/config/config.json
+I0614 13:27:42.332316 65164 cli_setting_manager.go:663] Skipping telemetry propagation because user is not logged in
+I0614 13:27:42.332322 65164 cli_setting_manager.go:80] CLI settings initialized: permissions=<nil>, toolPermission=request-review
+I0614 13:27:42.332660 65164 manager.go:453] CLI store manager initialized successfully
+I0614 13:27:42.332682 65164 printmode.go:189] Print mode: not authenticated, trying silent auth
+I0614 13:27:45.261838 65164 auth.go:114] ChainedAuth: authenticated via keyring (effective: keyring)
+I0614 13:27:45.261889 65164 server_oauth.go:212] applyAuthResult: email=dev@example.com, authMethod=consumer, quotaProject=
+I0614 13:27:45.261901 65164 server_oauth.go:217] OAuth: authenticated successfully as dev@example.com
+I0614 13:27:45.261906 65164 server_oauth.go:223] b.codeAssistClient.AuthProvider (0x403c39dab480) is same as b.cliAuth (0x403c39dab480)
+I0614 13:27:48.984496 65164 http_helpers.go:186] URL: https://daily-cloudcode-pa.googleapis.com/v1internal:loadCodeAssist Trace: 0xebfee953cd23d777
+I0614 13:27:50.137137 65164 http_helpers.go:186] URL: https://daily-cloudcode-pa.googleapis.com/v1internal:fetchAvailableModels Trace: 0xff2672cb4a05b86e
+I0614 13:27:50.271209 65164 model_config_manager.go:157] Propagating selected model override to backend: label="Gemini 3.5 Flash (High)"
+I0614 13:27:50.271282 65164 quota_manager.go:72] quotaRefreshLoop: starting reload (force=true)
+I0614 13:27:51.523965 65164 printmode.go:191] Print mode: silent auth succeeded
+I0614 13:27:51.524033 65164 input_loop.go:518] Auth done received, triggering experiment refresh
+I0614 13:27:51.524064 65164 experiment_manager.go:35] Starting experiment refresh after login
+I0614 13:27:52.066287 65164 http_helpers.go:186] URL: https://daily-cloudcode-pa.googleapis.com/v1internal:loadCodeAssist Trace: 0x9f09e9ec5125dc80
+I0614 13:27:52.076609 65164 experiment_manager.go:39] Experiments refreshed after login
+I0614 13:27:52.076670 65164 conversation_manager.go:320] Starting new conversation (agent=false)
+I0614 13:27:52.076683 65164 server.go:724] Creating new cascade trajectory (agentScript=false)
+I0614 13:27:52.076688 65164 server.go:727] Conversation using project ID: 11111111-1111-4111-8111-111111111111
+I0614 13:27:52.076684 65164 manager.go:1295] Reloading system slash commands
+I0614 13:27:52.081368 65164 server.go:755] Created conversation 22222222-2222-4222-8222-222222222222
+I0614 13:27:52.081412 65164 server.go:2094] GetConversationDetail: found conversation 22222222-2222-4222-8222-222222222222 (active=true)
+I0614 13:27:52.082634 65164 server.go:2094] GetConversationDetail: found conversation 22222222-2222-4222-8222-222222222222 (active=true)
+I0614 13:27:52.082654 65164 conversation_manager.go:367] project: switching to conversation belonging to project ID: 11111111-1111-4111-8111-111111111111
+I0614 13:27:52.082702 65164 server.go:1357] Backend project ID updated dynamically to: 11111111-1111-4111-8111-111111111111
+I0614 13:27:52.082712 65164 cli_setting_manager.go:199] ApplyProjectPermissionGrants: no grants for project "/home/dev/project", cleared project permissions
+I0614 13:27:52.082804 65164 manager.go:1319] Reloading system slash commands and skills
+I0614 13:27:52.082835 65164 manager.go:1295] Reloading system slash commands
+I0614 13:27:52.083025 65164 conversation_manager.go:423] project: synced active project to "/home/dev/project" (id=11111111-1111-4111-8111-111111111111) and updated workspace cache
+I0614 13:27:52.083039 65164 conversation_manager.go:537] Streaming conversation 22222222-2222-4222-8222-222222222222
+I0614 13:27:52.083058 65164 manager.go:1319] Reloading system slash commands and skills
+I0614 13:27:52.083076 65164 manager.go:1295] Reloading system slash commands
+I0614 13:27:52.083206 65164 server.go:764] Starting conversation update stream for 22222222-2222-4222-8222-222222222222
+I0614 13:27:52.083220 65164 printmode.go:155] Print mode: conversation=22222222-2222-4222-8222-222222222222, sending message
+I0614 13:27:52.083229 65164 conversation_manager.go:463] Forwarding user message to conversation 22222222-2222-4222-8222-222222222222 (items=1, media=0)
+I0614 13:27:52.083234 65164 server.go:1058] Sending user message to conversation 22222222-2222-4222-8222-222222222222 (items=1, media=0)
+I0614 13:27:52.083581 65164 manager.go:387] Ignoring IDLE update because we are waiting for RUNNING
+I0614 13:27:52.083600 65164 manager.go:1299] Slash commands unchanged, skipping update
+I0614 13:27:52.083732 65164 manager.go:1299] Slash commands unchanged, skipping update
+I0614 13:27:52.821459 65164 http_helpers.go:186] URL: https://daily-cloudcode-pa.googleapis.com/v1internal:loadCodeAssist Trace: 0x57c2636f420b34cf
+I0614 13:27:53.490724 65164 model_config_manager.go:157] Propagating selected model override to backend: label="Gemini 3.5 Flash (High)"
+I0614 13:27:53.490798 65164 model_config_manager.go:157] Propagating selected model override to backend: label="Gemini 3.5 Flash (High)"
+I0614 13:27:53.490830 65164 quota_manager.go:72] quotaRefreshLoop: starting reload (force=true)
+I0614 13:27:53.703961 65164 input_loop.go:518] Auth done received, triggering experiment refresh
+I0614 13:27:53.703996 65164 experiment_manager.go:35] Starting experiment refresh after login
+I0614 13:27:53.744632 65164 http_helpers.go:186] URL: https://daily-cloudcode-pa.googleapis.com/v1internal:streamGenerateContent?alt=sse Trace: 0xf56469cbfb512f56 ResponseID: OZAuaqqlGb65sOIP0eOMqAo
+I0614 13:27:53.835230 65164 input_loop.go:518] Auth done received, triggering experiment refresh
+I0614 13:27:53.835263 65164 experiment_manager.go:35] Starting experiment refresh after login
+I0614 13:27:53.877993 65164 quota_manager.go:72] quotaRefreshLoop: starting reload (force=true)
+I0614 13:27:54.228429 65164 experiment_manager.go:39] Experiments refreshed after login
+I0614 13:27:54.228488 65164 manager.go:1295] Reloading system slash commands
+I0614 13:27:54.228935 65164 manager.go:1299] Slash commands unchanged, skipping update
+I0614 13:27:54.233648 65164 model_config_manager.go:157] Propagating selected model override to backend: label="Gemini 3.5 Flash (High)"
+I0614 13:27:54.474317 65164 http_helpers.go:186] URL: https://daily-cloudcode-pa.googleapis.com/v1internal:loadCodeAssist Trace: 0x1c5ae429978e0e46
+I0614 13:27:54.487502 65164 quota_manager.go:72] quotaRefreshLoop: starting reload (force=true)
+I0614 13:27:54.629005 65164 experiment_manager.go:39] Experiments refreshed after login
+I0614 13:27:54.629055 65164 manager.go:1295] Reloading system slash commands
+I0614 13:27:54.629487 65164 manager.go:1299] Slash commands unchanged, skipping update
+I0614 13:27:54.844647 65164 input_loop.go:518] Auth done received, triggering experiment refresh
+I0614 13:27:54.844681 65164 experiment_manager.go:35] Starting experiment refresh after login
+I0614 13:27:54.962470 65164 http_helpers.go:186] URL: https://daily-cloudcode-pa.googleapis.com/v1internal:streamGenerateContent?alt=sse Trace: 0xd5c7b154ea4f0ec1 ResponseID: OpAuatOjK9-ejrEP4PKliQI
+I0614 13:27:55.211550 65164 experiment_manager.go:39] Experiments refreshed after login
+I0614 13:27:55.211621 65164 manager.go:1295] Reloading system slash commands
+I0614 13:27:55.212084 65164 manager.go:1299] Slash commands unchanged, skipping update
+I0614 13:27:55.299210 65164 manager.go:611] CLI store manager shutting down
+I0614 13:27:55.302332 65164 conversation_manager.go:504] Stopping conversation stream
+I0614 13:27:55.302392 65164 server.go:806] Stream goroutine exited for 22222222-2222-4222-8222-222222222222, sending completion signal
+I0614 13:27:55.302421 65164 conversation_manager.go:613] Stream completed for 22222222-2222-4222-8222-222222222222, clearing ResponsePending
+I0614 13:27:55.302902 65164 server.go:2218] Language server shutting down
