@@ -24,6 +24,7 @@ import {
 } from "./lib/agy.mjs";
 import { scanAgyLog } from "./lib/logscan.mjs";
 import { resolveReviewTarget } from "./lib/git.mjs";
+import { buildReviewPrompt, buildAdversarialReviewPrompt } from "./lib/review.mjs";
 import {
   createJob,
   writeJob,
@@ -240,49 +241,40 @@ function cmdResume(parsed) {
 }
 
 // ---------------------------------------------------------------------------
-// review
+// review / adversarial-review (shared core)
 // ---------------------------------------------------------------------------
-function cmdReview(parsed) {
+function runReview(parsed, { adversarial }) {
   requireBinaryOrExit();
   const cwd = process.cwd();
   const base = parsed.valued.base || null;
   const focus = parsed.text;
+  const label = adversarial ? "adversarial review" : "review";
 
   const target = resolveReviewTarget(cwd, base);
   if (!target.ok) {
-    out(`# 🛰️ Antigravity — review\n\nNothing to review: ${target.reason}.`);
+    out(`# 🛰️ Antigravity — ${label}\n\nNothing to review: ${target.reason}.`);
     return;
   }
 
-  const prompt = buildReviewPrompt(target, focus);
+  const prompt = adversarial
+    ? buildAdversarialReviewPrompt(target, focus)
+    : buildReviewPrompt(target, focus);
   // Reviews are contained + read-capable but should not modify the tree.
   const reviewParsed = { ...parsed, flags: { ...parsed.flags, sandbox: true } };
   runAgyTask(reviewParsed, {
-    kind: "review",
-    title: `review ${target.label}`,
+    kind: adversarial ? "adversarial-review" : "review",
+    title: `${label} ${target.label}`,
     prompt,
     readOnly: true,
   });
 }
 
-function buildReviewPrompt(target, focus) {
-  return [
-    "You are a meticulous senior code reviewer. Review ONLY the changes below. Do not modify any files.",
-    focus ? `\nReviewer focus: ${focus}` : "",
-    "\nReturn a concise review with:",
-    "1. Verdict (ship / ship with nits / needs work).",
-    "2. The most important issues first, each as: severity (critical/high/medium/low), file:line, what's wrong, and a concrete fix.",
-    "3. Anything risky around correctness, security, error handling, concurrency, or data loss.",
-    "4. A short list of suggested next steps.",
-    `\nReview target: ${target.label}`,
-    target.stat ? `\nDiffstat:\n${target.stat}` : "",
-    "\nUnified diff:\n",
-    "```diff",
-    target.diff,
-    "```",
-  ]
-    .filter(Boolean)
-    .join("\n");
+function cmdReview(parsed) {
+  return runReview(parsed, { adversarial: false });
+}
+
+function cmdAdversarialReview(parsed) {
+  return runReview(parsed, { adversarial: true });
 }
 
 // ---------------------------------------------------------------------------
@@ -350,9 +342,10 @@ function usage() {
       "",
       "Usage: node antigravity.mjs <subcommand> [args]",
       "  setup [--json]",
-      "  delegate <task> [--background] [--sandbox] [--read-only] [--continue] [--conversation <id>] [--add-dir <p>] [--print-timeout <dur>]",
-      "  review [--base <ref>] [--background] [focus text...]",
-      "  resume <follow-up> [--conversation <id>] [--background]",
+      "  delegate <task> [--background] [--wait] [--sandbox] [--read-only] [--model <label>] [--continue] [--conversation <id>] [--add-dir <p>] [--print-timeout <dur>]",
+      "  review [--base <ref>] [--background] [--wait] [--model <label>] [focus text...]",
+      "  adversarial-review [--base <ref>] [--background] [--wait] [--model <label>] [focus text...]",
+      "  resume <follow-up> [--conversation <id>] [--background] [--wait]",
       "  status [job-id]",
       "  result [job-id]",
       "  cancel [job-id]",
@@ -372,6 +365,8 @@ function main() {
       return cmdDelegate(parsed);
     case "review":
       return cmdReview(parsed);
+    case "adversarial-review":
+      return cmdAdversarialReview(parsed);
     case "resume":
       return cmdResume(parsed);
     case "status":
