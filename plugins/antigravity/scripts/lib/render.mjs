@@ -28,8 +28,15 @@ export function renderResponse(responseText, meta = {}) {
 export function renderError(error, meta = {}) {
   const lines = [`# 🛰️ Antigravity — ${meta.title || "error"}`, ""];
   if (!error) {
-    lines.push("Antigravity returned no output and no recognizable error was found in the log.");
-    if (meta.logFile) lines.push("", `Log: \`${meta.logFile}\``);
+    lines.push(
+      "**Antigravity returned no output** and no recognizable error was found in the log.",
+      "",
+      "This is usually a transient backend hiccup. What to do:",
+      "- Retry the command — it often succeeds on the second try.",
+      "- If it keeps happening, run `/antigravity:setup` to re-check auth, or `! agy` to re-verify sign-in.",
+    );
+    if (meta.conversationId) lines.push("", `Conversation: \`${meta.conversationId}\``);
+    if (meta.logFile) lines.push(`Log: \`${meta.logFile}\``);
     return ensureTrailingNewline(lines.join("\n").trimEnd());
   }
 
@@ -87,6 +94,7 @@ export function renderSetup(report) {
     `- version: ${report.version || "unknown"}`,
     `- config dir: ${report.configDir.detail}`,
     `- auth: ${report.auth.detail}`,
+    `- review gate: ${report.gate ? "on (Gemini reviews each turn before it can stop)" : "off"} — toggle with \`/antigravity:setup --enable-gate\` / \`--disable-gate\``,
     "",
   ];
   if (report.nextSteps.length) {

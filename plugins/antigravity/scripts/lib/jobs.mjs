@@ -105,8 +105,9 @@ export function reconcile(job) {
     job.status = "failed";
     job.error = scan.error.message + (scan.error.resetsIn ? ` (resets in ${scan.error.resetsIn})` : "");
   } else {
-    // No output, no detected error: treat as done-but-empty.
-    job.status = "done";
+    // No output and no recognizable error: this is a failure, not a silent success.
+    job.status = "failed";
+    job.error = "Antigravity returned no output (no error found in the log).";
   }
   return writeJob(job);
 }

@@ -17,12 +17,27 @@ if (argv.includes("--version")) {
   process.exit(0);
 }
 
+if (argv.includes("--help")) {
+  // Mirror real agy 1.0.8: --model exists, no --effort. Used by the --model probe.
+  process.stdout.write(
+    [
+      "Usage of agy:",
+      "  --model                         Model for the current CLI session",
+      "  --sandbox                       Run in a sandbox with terminal restrictions enabled",
+      "  --print-timeout                 Timeout for print mode wait",
+      "  -p                              Run a single prompt non-interactively and print the response",
+    ].join("\n") + "\n",
+  );
+  process.exit(0);
+}
+
 function valueOf(flag) {
   const i = argv.indexOf(flag);
   return i !== -1 ? argv[i + 1] : null;
 }
 
 const logFile = valueOf("--log-file");
+const model = valueOf("--model");
 // prompt is the last token (companion always puts `-p <prompt>` last)
 const prompt = argv[argv.length - 1];
 const convId = "abcd1234-ef56-7890-abcd-1234567890ef";
@@ -46,8 +61,20 @@ if (mode === "auth") {
   process.exit(0);
 }
 
+if (mode === "empty") {
+  // exit 0, no stdout, and NO recognizable error in the log (e.g. transient hiccup).
+  if (logFile) writeFileSync(logFile, baseLog);
+  process.exit(0);
+}
+
 // success
 if (logFile) writeFileSync(logFile, baseLog);
+// FAKE_AGY_REPLY lets tests drive an exact response (e.g. a gate "BLOCK: ..." verdict).
+if (process.env.FAKE_AGY_REPLY) {
+  process.stdout.write(`${process.env.FAKE_AGY_REPLY}\n`);
+  process.exit(0);
+}
 const echo = String(prompt || "").slice(0, 60).replace(/\s+/g, " ");
-process.stdout.write(`Gemini 3 (fake) reply. I received: "${echo}". Verdict: looks good.\n`);
+const modelNote = model ? ` model=${model}.` : "";
+process.stdout.write(`Gemini 3 (fake) reply. I received: "${echo}".${modelNote} Verdict: looks good.\n`);
 process.exit(0);

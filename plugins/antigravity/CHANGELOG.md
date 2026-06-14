@@ -2,6 +2,26 @@
 
 All notable changes to the `antigravity` plugin are documented here.
 
+## [0.2.0] — 2026-06-14
+
+codex-plugin-cc parity, as a fork of `Idun-Group/antigravity-plugin-cc`. Verified against agy 1.0.8.
+
+### Added
+- `/antigravity:adversarial-review` — red-team review that challenges whether the change should ship (ported from codex-plugin-cc's adversarial prompt). Read-only + sandboxed.
+- **Opt-in stop-review-gate** — a `Stop` hook (`hooks/hooks.json`) runs Antigravity (Gemini 3.5) over the turn's working-tree diff using an `ALLOW:`/`BLOCK:` contract and blocks stopping on `BLOCK`. Off by default; toggle with `/antigravity:setup --enable-gate` / `--disable-gate`. **Fail-safe:** agy missing/quota/timeout/empty/garbled output, no diff, `stop_hook_active`, or `ANTIGRAVITY_CC_NO_GATE=1` all allow — a broken gate can never trap the user.
+- `--model <label>` passthrough on delegate/review/adversarial-review/resume, behind an `agy --help` capability probe (agy 1.0.8+; warn+ignore on older builds).
+- `--wait` — synchronous foreground run that returns the result inline (overrides `--background`).
+- `--json` on review/adversarial-review — emits clean, schema-validated JSON (matching the new `schemas/review-output.schema.json`) with a structured fallback so stdout is always parseable.
+
+### Fixed
+- **logscan no longer false-positives on agy 1.0.8's benign startup errors.** agy logs ~30 `E`-level "not logged into Antigravity" lines before silent auth completes; `scanAgyLog` now only classifies errors after the auth-success marker, and treats "not logged in" as a real error only when auth never succeeded. Quota matching tightened to real quota errors (not the bare word "quota", which appears in `quotaRefreshLoop` info lines). Regression-tested against a real captured log.
+- **Empty output is surfaced as a failure**, never a silent success — foreground and background `reconcile()` both report "no output" with a retry hint.
+- **Reviews and the stop-gate now embed untracked (new) file CONTENT, not just filenames** (with binary/size guards), so a turn that adds new files can't slip past review/the gate unseen. *(Codex review finding.)*
+
+### Notes
+- No new runtime dependencies. Test suite expanded to 70 tests (`node --test`), CI on Node 18/20/22.
+- Reviewed by OpenAI Codex (via the codex-plugin-cc rescue runtime): no critical/high findings; the two medium findings (`--json` cleanliness, untracked-content coverage) are fixed above.
+
 ## [0.1.0] — 2026-05-31
 
 Initial release.

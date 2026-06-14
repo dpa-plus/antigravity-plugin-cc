@@ -14,6 +14,7 @@ import { openSync, readFileSync, existsSync } from "node:fs";
  * @param {string[]} [opts.addDirs]
  * @param {boolean} [opts.yolo]            --dangerously-skip-permissions
  * @param {boolean} [opts.sandbox]         --sandbox
+ * @param {string}  [opts.model]           --model <label> (agy 1.0.8+; ignored upstream if absent)
  * @param {boolean} [opts.continueLast]    --continue
  * @param {string}  [opts.conversationId]  --conversation <id>
  * @param {string}  [opts.logFile]         --log-file <path>
@@ -24,6 +25,7 @@ export function buildPrintArgs(opts) {
   const args = [];
   if (opts.sandbox) args.push("--sandbox");
   if (opts.yolo) args.push("--dangerously-skip-permissions");
+  if (opts.model) args.push("--model", opts.model);
   for (const dir of opts.addDirs || []) {
     if (dir) args.push("--add-dir", dir);
   }
@@ -109,6 +111,25 @@ export function spawnBackground({ bin, args, cwd, outputFile, errFile }) {
   });
   child.unref();
   return { pid: child.pid };
+}
+
+/**
+ * Best-effort capability probe: does this agy build accept `--model`?
+ * agy 1.0.8 does; older builds (≤1.0.3) don't and would error on an unknown flag.
+ * Cached per binary path for the lifetime of the process.
+ */
+const _modelSupport = new Map();
+export function agySupportsModel(bin) {
+  if (_modelSupport.has(bin)) return _modelSupport.get(bin);
+  let supported = false;
+  try {
+    const res = spawnSync(bin, ["--help"], { encoding: "utf8", timeout: 15000 });
+    supported = /(^|\s)--model\b/.test(`${res.stdout || ""}${res.stderr || ""}`);
+  } catch {
+    supported = false;
+  }
+  _modelSupport.set(bin, supported);
+  return supported;
 }
 
 /** Quick `agy --version`. Returns version string or null. */
