@@ -53,6 +53,17 @@ test("delegate surfaces an auth error with sign-in guidance", () => {
   assert.match(stdout, /agy/);
 });
 
+test("delegate --model passes the model through to agy (when supported)", () => {
+  const { stdout } = run(["delegate", "hello", "--model", "Gemini 3.5 Pro"], { mode: "success" });
+  assert.match(stdout, /model=Gemini 3\.5 Pro/);
+});
+
+test("empty output (exit 0, no response, no log error) is surfaced as a failure, not success", () => {
+  const { stdout } = run(["delegate", "anything"], { mode: "empty" });
+  assert.match(stdout, /returned no output/i);
+  assert.match(stdout, /Retry/i);
+});
+
 test("status + result work across invocations sharing a home", () => {
   const home = mkdtempSync(join(tmpdir(), "agy-home-shared-"));
   run(["delegate", "remember me"], { mode: "success", home });
