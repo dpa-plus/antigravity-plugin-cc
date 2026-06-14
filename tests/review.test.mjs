@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   buildReviewPrompt,
   buildAdversarialReviewPrompt,
+  parseReviewJson,
 } from "../plugins/antigravity/scripts/lib/review.mjs";
 
 const target = {
@@ -46,4 +47,24 @@ test("{ json: true } appends the structured-output contract", () => {
 
 test("adversarial review also supports { json: true }", () => {
   assert.match(buildAdversarialReviewPrompt(target, "", { json: true }), /Return ONLY a single valid JSON object/);
+});
+
+test("parseReviewJson accepts a clean schema-valid object", () => {
+  const r = parseReviewJson('{"verdict":"approve","summary":"ok","findings":[],"next_steps":[]}');
+  assert.equal(r.ok, true);
+  assert.equal(r.data.verdict, "approve");
+});
+
+test("parseReviewJson tolerates ```json fences and surrounding prose", () => {
+  const r = parseReviewJson('Sure:\n```json\n{"verdict":"needs-attention","summary":"x","findings":[],"next_steps":["fix"]}\n```\n');
+  assert.equal(r.ok, true);
+  assert.equal(r.data.verdict, "needs-attention");
+});
+
+test("parseReviewJson rejects invalid or non-conforming output", () => {
+  assert.equal(parseReviewJson("totally not json").ok, false);
+  assert.equal(parseReviewJson("").ok, false);
+  assert.equal(parseReviewJson('{"verdict":"maybe","summary":"x","findings":[],"next_steps":[]}').ok, false); // bad enum
+  assert.equal(parseReviewJson('{"summary":"x","findings":[],"next_steps":[]}').ok, false); // missing verdict
+  assert.equal(parseReviewJson('{"verdict":"approve","summary":"x","findings":{},"next_steps":[]}').ok, false); // findings not array
 });

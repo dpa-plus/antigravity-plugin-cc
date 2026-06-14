@@ -14,6 +14,32 @@ function jsonContract() {
   ].join("\n");
 }
 
+/**
+ * Parse + shallow-validate agy's JSON review output against review-output.schema.json.
+ * Tolerant of ```json fences and surrounding prose (extracts the first {...last }).
+ * @returns {{ ok: true, data: object } | { ok: false, error: string }}
+ */
+export function parseReviewJson(text) {
+  const raw = String(text || "").trim();
+  if (!raw) return { ok: false, error: "empty" };
+  const unfenced = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
+  const start = unfenced.indexOf("{");
+  const end = unfenced.lastIndexOf("}");
+  if (start === -1 || end === -1 || end < start) return { ok: false, error: "no-json-object" };
+  let data;
+  try {
+    data = JSON.parse(unfenced.slice(start, end + 1));
+  } catch {
+    return { ok: false, error: "invalid-json" };
+  }
+  if (typeof data !== "object" || data === null || Array.isArray(data)) return { ok: false, error: "not-object" };
+  if (!["approve", "needs-attention"].includes(data.verdict)) return { ok: false, error: "bad-verdict" };
+  if (typeof data.summary !== "string" || !data.summary) return { ok: false, error: "bad-summary" };
+  if (!Array.isArray(data.findings)) return { ok: false, error: "bad-findings" };
+  if (!Array.isArray(data.next_steps)) return { ok: false, error: "bad-next_steps" };
+  return { ok: true, data };
+}
+
 function diffBlock(target) {
   return [
     `Review target: ${target.label}`,
