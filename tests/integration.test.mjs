@@ -1,13 +1,32 @@
 import { test, before } from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { mkdtempSync, chmodSync } from "node:fs";
+import { mkdtempSync, chmodSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const COMPANION = fileURLToPath(new URL("../plugins/antigravity/scripts/antigravity.mjs", import.meta.url));
 const FAKE_AGY = fileURLToPath(new URL("./fake-agy.mjs", import.meta.url));
+
+// Create a throwaway git repo with one committed file and one uncommitted change.
+function gitRepo() {
+  const dir = mkdtempSync(join(tmpdir(), "agy-git-"));
+  const env = {
+    ...process.env,
+    GIT_AUTHOR_NAME: "t",
+    GIT_AUTHOR_EMAIL: "t@t",
+    GIT_COMMITTER_NAME: "t",
+    GIT_COMMITTER_EMAIL: "t@t",
+  };
+  const g = (args) => execFileSync("git", args, { cwd: dir, env, encoding: "utf8" });
+  g(["init", "-q"]);
+  writeFileSync(join(dir, "x.txt"), "one\n");
+  g(["add", "."]);
+  g(["commit", "-q", "-m", "init"]);
+  writeFileSync(join(dir, "x.txt"), "one\ntwo\n");
+  return dir;
+}
 
 function run(args, { mode = "success", home } = {}) {
   const cwd = mkdtempSync(join(tmpdir(), "agy-cwd-"));
@@ -62,6 +81,43 @@ test("empty output (exit 0, no response, no log error) is surfaced as a failure,
   const { stdout } = run(["delegate", "anything"], { mode: "empty" });
   assert.match(stdout, /returned no output/i);
   assert.match(stdout, /Retry/i);
+});
+
+test("adversarial-review runs against a working-tree diff with skeptical framing", () => {
+  const cwd = gitRepo();
+  const env = {
+    ...process.env,
+    ANTIGRAVITY_CC_AGY_BIN: FAKE_AGY,
+    ANTIGRAVITY_CC_HOME: mkdtempSync(join(tmpdir(), "agy-home-")),
+    FAKE_AGY_MODE: "success",
+  };
+  const stdout = execFileSync("node", [COMPANION, "adversarial-review"], { cwd, env, encoding: "utf8" });
+  assert.match(stdout, /Gemini 3 \(fake\) reply/);
+  assert.doesNotMatch(stdout, /Nothing to review/);
+  // fake-agy echoes the leading prompt text, which proves the adversarial prompt was sent
+  assert.match(stdout, /ADVERSARIAL/);
+});
+
+test("review reports nothing to review on a clean tree", () => {
+  const dir = mkdtempSync(join(tmpdir(), "agy-git-clean-"));
+  const env = {
+    ...process.env,
+    GIT_AUTHOR_NAME: "t",
+    GIT_AUTHOR_EMAIL: "t@t",
+    GIT_COMMITTER_NAME: "t",
+    GIT_COMMITTER_EMAIL: "t@t",
+  };
+  const g = (args) => execFileSync("git", args, { cwd: dir, env, encoding: "utf8" });
+  g(["init", "-q"]);
+  writeFileSync(join(dir, "x.txt"), "one\n");
+  g(["add", "."]);
+  g(["commit", "-q", "-m", "init"]);
+  const stdout = execFileSync("node", [COMPANION, "review"], {
+    cwd: dir,
+    env: { ...process.env, ANTIGRAVITY_CC_AGY_BIN: FAKE_AGY, ANTIGRAVITY_CC_HOME: mkdtempSync(join(tmpdir(), "agy-home-")) },
+    encoding: "utf8",
+  });
+  assert.match(stdout, /Nothing to review/);
 });
 
 test("status + result work across invocations sharing a home", () => {
