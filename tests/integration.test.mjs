@@ -83,6 +83,22 @@ test("empty output (exit 0, no response, no log error) is surfaced as a failure,
   assert.match(stdout, /Retry/i);
 });
 
+test("delegate --wait returns the result inline (synchronous foreground)", () => {
+  const { stdout } = run(["delegate", "wait for me", "--wait"], { mode: "success" });
+  assert.match(stdout, /Gemini 3 \(fake\) reply/);
+  assert.match(stdout, /wait for me/);
+});
+
+test("delegate --background returns a job id immediately, --wait overrides to foreground", () => {
+  const bg = run(["delegate", "later", "--background"], { mode: "success" });
+  assert.match(bg.stdout, /started in background/i);
+  assert.match(bg.stdout, /agy-/);
+  // --wait wins over --background: result comes back inline, no "started in background"
+  const both = run(["delegate", "now", "--background", "--wait"], { mode: "success" });
+  assert.match(both.stdout, /Gemini 3 \(fake\) reply/);
+  assert.doesNotMatch(both.stdout, /started in background/i);
+});
+
 test("adversarial-review runs against a working-tree diff with skeptical framing", () => {
   const cwd = gitRepo();
   const env = {

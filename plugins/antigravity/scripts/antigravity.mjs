@@ -173,7 +173,16 @@ function runAgyTask(parsed, { kind, title, prompt, readOnly, resume }) {
     printTimeout,
   });
 
-  if (background) {
+  const watchdogMs = goDurationToMs(printTimeout) + 60_000;
+  const wait = hasFlag(parsed, "wait");
+
+  // --background detaches into a tracked job and returns its id immediately.
+  // --wait forces the synchronous foreground path (and overrides --background), so the
+  // caller blocks for the result inline — the explicit form of the default behavior.
+  // (We intentionally do NOT poll a detached job here: a child that exits while the
+  // parent is still polling becomes an unreaped zombie, and kill(pid,0) reports it as
+  // alive — so spawnSync's clean wait/reap in runForeground is the correct mechanism.)
+  if (background && !wait) {
     const { pid } = spawnBackground({
       bin: bin.path,
       args,
@@ -187,7 +196,6 @@ function runAgyTask(parsed, { kind, title, prompt, readOnly, resume }) {
     return;
   }
 
-  const watchdogMs = goDurationToMs(printTimeout) + 60_000;
   const result = runForeground({ bin: bin.path, args, cwd, logFile: job.paths.log, watchdogMs });
   const scan = scanAgyLog(result.logText);
   job.conversationId = scan.conversationId || job.conversationId;
