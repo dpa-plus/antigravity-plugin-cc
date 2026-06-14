@@ -94,6 +94,7 @@ export function renderSetup(report) {
     `- version: ${report.version || "unknown"}`,
     `- config dir: ${report.configDir.detail}`,
     `- auth: ${report.auth.detail}`,
+    `- review gate: ${report.gate ? "on (Gemini reviews each turn before it can stop)" : "off"} — toggle with \`/antigravity:setup --enable-gate\` / \`--disable-gate\``,
     "",
   ];
   if (report.nextSteps.length) {

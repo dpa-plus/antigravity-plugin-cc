@@ -69,6 +69,11 @@ if (mode === "empty") {
 
 // success
 if (logFile) writeFileSync(logFile, baseLog);
+// FAKE_AGY_REPLY lets tests drive an exact response (e.g. a gate "BLOCK: ..." verdict).
+if (process.env.FAKE_AGY_REPLY) {
+  process.stdout.write(`${process.env.FAKE_AGY_REPLY}\n`);
+  process.exit(0);
+}
 const echo = String(prompt || "").slice(0, 60).replace(/\s+/g, " ");
 const modelNote = model ? ` model=${model}.` : "";
 process.stdout.write(`Gemini 3 (fake) reply. I received: "${echo}".${modelNote} Verdict: looks good.\n`);

@@ -25,6 +25,7 @@ import {
 import { scanAgyLog } from "./lib/logscan.mjs";
 import { resolveReviewTarget } from "./lib/git.mjs";
 import { buildReviewPrompt, buildAdversarialReviewPrompt } from "./lib/review.mjs";
+import { isGateEnabled, setGate } from "./lib/config.mjs";
 import {
   createJob,
   writeJob,
@@ -61,6 +62,11 @@ function clampPrompt(prompt) {
 // setup
 // ---------------------------------------------------------------------------
 function cmdSetup(parsed) {
+  // Stop-review-gate toggle (opt-in). Applied before reporting so the new state shows.
+  if (hasFlag(parsed, "enable-gate")) setGate(true);
+  if (hasFlag(parsed, "disable-gate")) setGate(false);
+  const gateOn = isGateEnabled();
+
   const bin = resolveAgyBinary();
   const configDir = agyConfigDir();
   const configExists = existsSync(configDir);
@@ -86,6 +92,7 @@ function cmdSetup(parsed) {
           ? "looks configured (a prior signed-in session was found)"
           : "no prior session detected — run `! agy` once to sign in",
     },
+    gate: gateOn,
     nextSteps: [],
   };
 
@@ -107,6 +114,7 @@ function cmdSetup(parsed) {
           version,
           authedGuess,
           configDir,
+          gate: gateOn,
         },
         null,
         2,
