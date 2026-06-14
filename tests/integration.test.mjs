@@ -114,6 +114,46 @@ test("adversarial-review runs against a working-tree diff with skeptical framing
   assert.match(stdout, /ADVERSARIAL/);
 });
 
+test("review --json emits clean schema-valid JSON (no markdown wrapper)", () => {
+  const cwd = gitRepo();
+  const reply = JSON.stringify({
+    verdict: "needs-attention",
+    summary: "risky change",
+    findings: [
+      { severity: "high", title: "t", body: "b", file: "x.txt", line_start: 1, line_end: 2, confidence: 0.9, recommendation: "fix it" },
+    ],
+    next_steps: ["add a test"],
+  });
+  const env = {
+    ...process.env,
+    ANTIGRAVITY_CC_AGY_BIN: FAKE_AGY,
+    ANTIGRAVITY_CC_HOME: mkdtempSync(join(tmpdir(), "agy-home-")),
+    FAKE_AGY_MODE: "success",
+    FAKE_AGY_REPLY: reply,
+  };
+  const stdout = execFileSync("node", [COMPANION, "review", "--json"], { cwd, env, encoding: "utf8" });
+  const data = JSON.parse(stdout); // must be parseable — no markdown
+  assert.equal(data.verdict, "needs-attention");
+  assert.equal(data.findings[0].file, "x.txt");
+  assert.doesNotMatch(stdout, /🛰️|# Antigravity/);
+});
+
+test("review --json falls back to a valid JSON object when agy returns non-JSON", () => {
+  const cwd = gitRepo();
+  const env = {
+    ...process.env,
+    ANTIGRAVITY_CC_AGY_BIN: FAKE_AGY,
+    ANTIGRAVITY_CC_HOME: mkdtempSync(join(tmpdir(), "agy-home-")),
+    FAKE_AGY_MODE: "success",
+    FAKE_AGY_REPLY: "I think it's fine, no JSON here.",
+  };
+  const stdout = execFileSync("node", [COMPANION, "review", "--json"], { cwd, env, encoding: "utf8" });
+  const data = JSON.parse(stdout); // still valid JSON
+  assert.equal(data.verdict, "needs-attention");
+  assert.ok(data.error);
+  assert.match(data.raw_output, /no JSON here/);
+});
+
 test("review reports nothing to review on a clean tree", () => {
   const dir = mkdtempSync(join(tmpdir(), "agy-git-clean-"));
   const env = {

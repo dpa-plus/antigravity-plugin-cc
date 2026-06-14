@@ -24,7 +24,7 @@ import {
 } from "./lib/agy.mjs";
 import { scanAgyLog } from "./lib/logscan.mjs";
 import { resolveReviewTarget } from "./lib/git.mjs";
-import { buildReviewPrompt, buildAdversarialReviewPrompt } from "./lib/review.mjs";
+import { buildReviewPrompt, buildAdversarialReviewPrompt, parseReviewJson } from "./lib/review.mjs";
 import { isGateEnabled, setGate } from "./lib/config.mjs";
 import {
   createJob,
@@ -272,10 +272,16 @@ function runReview(parsed, { adversarial }) {
     return;
   }
 
-  const json = hasFlag(parsed, "json");
+  // --json: emit clean, schema-validated JSON on stdout (foreground capture), not the
+  // Markdown-wrapped render path. Falls back to a structured needs-attention object if
+  // agy returns no/invalid JSON, so stdout is ALWAYS parseable.
+  if (hasFlag(parsed, "json")) {
+    return runJsonReview(parsed, { adversarial, target });
+  }
+
   const prompt = adversarial
-    ? buildAdversarialReviewPrompt(target, focus, { json })
-    : buildReviewPrompt(target, focus, { json });
+    ? buildAdversarialReviewPrompt(target, focus)
+    : buildReviewPrompt(target, focus);
   // Reviews are contained + read-capable but should not modify the tree.
   const reviewParsed = { ...parsed, flags: { ...parsed.flags, sandbox: true } };
   runAgyTask(reviewParsed, {
@@ -284,6 +290,75 @@ function runReview(parsed, { adversarial }) {
     prompt,
     readOnly: true,
   });
+}
+
+function runJsonReview(parsed, { adversarial, target }) {
+  const bin = requireBinaryOrExit();
+  const cwd = process.cwd();
+  const focus = parsed.text;
+  const prompt = adversarial
+    ? buildAdversarialReviewPrompt(target, focus, { json: true })
+    : buildReviewPrompt(target, focus, { json: true });
+
+  const resolvedModel =
+    parsed.valued.model && agySupportsModel(bin.path) ? parsed.valued.model : null;
+  const printTimeout = parsed.valued["print-timeout"] || "10m";
+  const job = createJob({
+    kind: adversarial ? "adversarial-review" : "review",
+    title: `${adversarial ? "adversarial review" : "review"} ${target.label} (json)`,
+    prompt,
+    cwd,
+  });
+  const args = buildPrintArgs({
+    prompt,
+    addDirs: [cwd],
+    sandbox: true,
+    yolo: false,
+    model: resolvedModel,
+    logFile: job.paths.log,
+    printTimeout,
+  });
+  const result = runForeground({
+    bin: bin.path,
+    args,
+    cwd,
+    logFile: job.paths.log,
+    watchdogMs: goDurationToMs(printTimeout) + 60_000,
+  });
+  const scan = scanAgyLog(result.logText);
+  job.conversationId = scan.conversationId || null;
+  const text = (result.stdout || "").trim();
+
+  const parsedJson = parseReviewJson(text);
+  if (parsedJson.ok) {
+    job.status = "done";
+    writeJob(job);
+    out(JSON.stringify(parsedJson.data, null, 2));
+    return;
+  }
+
+  // Fail-safe: always emit a valid JSON object so --json output is parseable.
+  job.status = text ? "done" : "failed";
+  job.error = text ? null : scan.error ? scan.error.message : "no output";
+  writeJob(job);
+  out(
+    JSON.stringify(
+      {
+        verdict: "needs-attention",
+        summary: text
+          ? "Antigravity did not return schema-valid JSON; see raw_output."
+          : scan.error
+            ? `Antigravity error: ${scan.error.message}`
+            : "Antigravity returned no output.",
+        findings: [],
+        next_steps: ["Re-run the review (optionally without --json)."],
+        error: parsedJson.error || (scan.error ? scan.error.kind : "no-output"),
+        raw_output: text || null,
+      },
+      null,
+      2,
+    ),
+  );
 }
 
 function cmdReview(parsed) {
