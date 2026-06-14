@@ -55,7 +55,11 @@ function requireBinaryOrExit() {
 function clampPrompt(prompt) {
   const buf = Buffer.from(prompt, "utf8");
   if (buf.length <= MAX_PROMPT_BYTES) return prompt;
-  return `${buf.subarray(0, MAX_PROMPT_BYTES).toString("utf8")}\n\n[...truncated by antigravity-plugin-cc: prompt exceeded ${MAX_PROMPT_BYTES} bytes...]`;
+  // Walk back from the byte limit to avoid cutting mid-character (UTF-8 continuation
+  // bytes have the high bits 10xxxxxx).
+  let end = MAX_PROMPT_BYTES;
+  while (end > 0 && (buf[end] & 0xc0) === 0x80) end--;
+  return `${buf.subarray(0, end).toString("utf8")}\n\n[...truncated by antigravity-plugin-cc: prompt exceeded ${MAX_PROMPT_BYTES} bytes...]`;
 }
 
 // ---------------------------------------------------------------------------
