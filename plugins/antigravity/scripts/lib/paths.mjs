@@ -68,10 +68,24 @@ export function agyConversationsDir(env = process.env) {
   return join(agyConfigDir(env), "conversations");
 }
 
-/** Root for this plugin's own job state. Override with ANTIGRAVITY_CC_HOME (tests). */
+/** Base dir for this plugin's own state. Override with ANTIGRAVITY_CC_HOME (tests). */
+export function pluginHome(env = process.env) {
+  return env.ANTIGRAVITY_CC_HOME || join(homedir(), ".antigravity-cc");
+}
+
+/** Root for this plugin's own job state. */
 export function jobsRoot(env = process.env) {
-  const base = env.ANTIGRAVITY_CC_HOME || join(homedir(), ".antigravity-cc");
-  return join(base, "jobs");
+  return join(pluginHome(env), "jobs");
+}
+
+/** Plugin config file (stop-review-gate toggle, etc.). */
+export function configPath(env = process.env) {
+  return join(pluginHome(env), "config.json");
+}
+
+/** Log file the stop-review-gate points agy at (so the last gate run is inspectable). */
+export function gateLogPath(env = process.env) {
+  return join(pluginHome(env), "gate-last.log");
 }
 
 export function jobDir(id, env = process.env) {
