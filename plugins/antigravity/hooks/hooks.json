@@ -1,0 +1,16 @@
+{
+  "description": "Optional, opt-in stop-time review gate: Antigravity (Gemini 3.5) reviews the turn's diff and can block stopping until issues are fixed. Off by default — enable with /antigravity:setup --enable-gate. Fail-safe: only an explicit BLOCK blocks; anything else allows.",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/stop-review-gate-hook.mjs\"",
+            "timeout": 600
+          }
+        ]
+      }
+    ]
+  }
+}

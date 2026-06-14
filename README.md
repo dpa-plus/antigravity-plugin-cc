@@ -17,15 +17,22 @@ A Claude Code plugin that hands work to `agy` — Google's Antigravity CLI — a
 
 ## What you get
 
-Seven slash commands, all under the `/antigravity:` namespace. Each one shells out to a small Node companion that wraps `agy` in headless (`-p`) mode and manages background jobs.
+Eight slash commands plus an opt-in review gate, all under the `/antigravity:` namespace. Each command shells out to a small Node companion that wraps `agy` in headless (`-p`) mode and manages background jobs.
 
-- **`/antigravity:setup`** — check that `agy` is installed, find its binary and version, and get a best-effort read on whether you're signed in. Never logs you in.
-- **`/antigravity:delegate`** — hand a task to Gemini 3.5. Write-capable by default; can be sandboxed or made read-only, and can run in the background.
-- **`/antigravity:review`** — read-only cross-model review of your current diff (or `base...HEAD`). Sandboxed.
+- **`/antigravity:setup`** — check that `agy` is installed, find its binary and version, and get a best-effort read on whether you're signed in. Toggles the review gate (`--enable-gate` / `--disable-gate`). Never logs you in.
+- **`/antigravity:delegate`** — hand a task to Gemini 3.5. Write-capable by default; can be sandboxed or made read-only, and can run in the background or `--wait`.
+- **`/antigravity:review`** — read-only cross-model review of your current diff (or `base...HEAD`). Sandboxed. `--json` for structured output.
+- **`/antigravity:adversarial-review`** — a skeptical, red-team review that challenges whether the change should ship at all. Read-only + sandboxed.
 - **`/antigravity:resume`** — continue the most recent Antigravity conversation (or a specific one) with a follow-up.
 - **`/antigravity:status`** — list background jobs for this repo, or inspect one.
 - **`/antigravity:result`** — print the final output of a finished job, plus the conversation id and a resume hint.
 - **`/antigravity:cancel`** — stop a running background job.
+
+**Common flags:** `--model <label>` (pick the Gemini model, agy 1.0.8+), `--background` (detach into a tracked job), `--wait` (run in the foreground and block for the result).
+
+**Opt-in stop-review-gate.** Turn it on with `/antigravity:setup --enable-gate` and Antigravity reviews the diff every time Claude tries to finish a code-changing turn, blocking the stop until issues are addressed — a cross-model safety net modeled on codex-plugin-cc. Off by default; fails safe (a broken/rate-limited gate always allows); hard kill-switch `ANTIGRAVITY_CC_NO_GATE=1`.
+
+> This is a **codex-parity fork** of [`Idun-Group/antigravity-plugin-cc`](https://github.com/Idun-Group/antigravity-plugin-cc) (MIT). It adds adversarial-review, the stop-review-gate, `--model`, `--wait`, `--json`, and agy 1.0.8 log-scanning hardening. See [`NOTICE`](NOTICE) and [`docs/codex-parity-spec.md`](docs/codex-parity-spec.md).
 
 ---
 

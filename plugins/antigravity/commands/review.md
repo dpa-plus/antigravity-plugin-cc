@@ -1,6 +1,6 @@
 ---
 description: Cross-model code review of your changes by Gemini 3.5 (read-only, contained).
-argument-hint: "[--base <ref>] [--background] [focus text]"
+argument-hint: "[--base <ref>] [--background] [--wait] [--json] [--model <label>] [focus text]"
 allowed-tools: Bash(node:*)
 ---
 
@@ -20,6 +20,9 @@ Then show the review verbatim, then add a one-line summary of the most important
 - **`--base <ref>`** — reviews `<ref>...HEAD` instead. Use `--base main` to review the whole branch, `--base HEAD~3` for the last three commits.
 - **Trailing focus text** — anything after the flags steers the review. Point Gemini at what you care about: `security`, `error handling`, `the new retry logic`, `concurrency bugs`.
 - **`--background`** — for large diffs, run it as a job and keep working. You get a job id back; check progress with `/antigravity:status` and pull the finished review with `/antigravity:result`.
+- **`--wait`** — run as a job but block until it finishes, then print the result.
+- **`--json`** — ask Gemini for a structured JSON review (matching `schemas/review-output.schema.json`) instead of prose. Best-effort.
+- **`--model <label>`** — pick the Gemini model for this run (e.g. `--model "Gemini 3.5 Pro"`); needs an agy build with `--model` support.
 
 ## Examples
 
