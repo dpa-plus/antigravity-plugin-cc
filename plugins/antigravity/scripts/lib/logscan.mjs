@@ -15,11 +15,31 @@
 export function scanAgyLog(logText) {
   const text = typeof logText === "string" ? logText : "";
 
+  // Conversation id is extracted from the whole log (it is emitted post-auth anyway).
   const conversationId = extractConversationId(text);
-  const errorLines = extractErrorLines(text);
+  // Errors are only meaningful AFTER agy finishes (silently) authenticating. See
+  // stripBenignAuthPreamble — agy 1.0.8 logs ~30 "not logged in" E-lines on startup
+  // that are pure noise on a successful run.
+  const errorLines = extractErrorLines(stripBenignAuthPreamble(text));
   const error = classifyError(errorLines);
 
   return { conversationId, error, errorLines };
+}
+
+// Markers that prove agy reached an authenticated state. If present, everything
+// before the LAST one is startup noise (transient token-source / "not logged in"
+// errors that agy emits before silent auth completes) and must be ignored. If
+// ABSENT, agy never authenticated, so those "not logged in" lines are the real error.
+const AUTH_SUCCESS_MARKERS = ["silent auth succeeded", "authenticated via keyring"];
+
+function stripBenignAuthPreamble(text) {
+  const lines = text.split(/\r?\n/);
+  let lastAuthIdx = -1;
+  for (let i = 0; i < lines.length; i += 1) {
+    if (AUTH_SUCCESS_MARKERS.some((m) => lines[i].includes(m))) lastAuthIdx = i;
+  }
+  if (lastAuthIdx === -1) return text;
+  return lines.slice(lastAuthIdx + 1).join("\n");
 }
 
 function extractConversationId(text) {
@@ -39,7 +59,9 @@ function extractErrorLines(text) {
     // glog/klog style: severity letter prefix E/F at the very start.
     const isErrorSeverity = /^[EF]\d{4}\s/.test(line);
     const looksLikeError =
-      /RESOURCE_EXHAUSTED|UNAUTHENTICATED|PERMISSION_DENIED|agent executor error|code 4\d{2}|code 5\d{2}|quota|not authenticated|login required/i.test(
+      // NB: match real quota *errors* (RESOURCE_EXHAUSTED / "quota reached"), not the
+      // bare word "quota" — agy logs info lines like "quotaRefreshLoop: starting reload".
+      /RESOURCE_EXHAUSTED|UNAUTHENTICATED|PERMISSION_DENIED|agent executor error|code 4\d{2}|code 5\d{2}|quota (?:exhausted|reached|exceeded)|not authenticated|not logged in|login required/i.test(
         line,
       );
     if (isErrorSeverity || looksLikeError) {
@@ -54,7 +76,7 @@ function classifyError(errorLines) {
   if (errorLines.length === 0) return null;
   const joined = errorLines.join("\n");
 
-  if (/RESOURCE_EXHAUSTED|Individual quota reached|quota/i.test(joined)) {
+  if (/RESOURCE_EXHAUSTED|Individual quota reached|quota (?:exhausted|reached|exceeded)/i.test(joined)) {
     const reset = joined.match(/Resets in ([0-9hms]+)/i);
     return {
       kind: "quota",
@@ -63,7 +85,7 @@ function classifyError(errorLines) {
     };
   }
 
-  if (/UNAUTHENTICATED|not authenticated|login required|PERMISSION_DENIED/i.test(joined)) {
+  if (/UNAUTHENTICATED|not authenticated|not logged in|login required|PERMISSION_DENIED/i.test(joined)) {
     return {
       kind: "auth",
       message: "Antigravity is not authenticated. Run `! agy` once to sign in.",
