@@ -34,3 +34,16 @@ test("focus text is woven into both prompts", () => {
   assert.match(buildReviewPrompt(target, "security"), /security/);
   assert.match(buildAdversarialReviewPrompt(target, "tenant isolation"), /tenant isolation/);
 });
+
+test("{ json: true } appends the structured-output contract", () => {
+  const p = buildReviewPrompt(target, "", { json: true });
+  assert.match(p, /Return ONLY a single valid JSON object/);
+  assert.match(p, /"verdict": "approve" \| "needs-attention"/);
+  assert.match(p, /line_start/);
+  // default (no json) must NOT include the contract
+  assert.doesNotMatch(buildReviewPrompt(target, ""), /Return ONLY a single valid JSON object/);
+});
+
+test("adversarial review also supports { json: true }", () => {
+  assert.match(buildAdversarialReviewPrompt(target, "", { json: true }), /Return ONLY a single valid JSON object/);
+});

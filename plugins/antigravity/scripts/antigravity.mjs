@@ -272,9 +272,10 @@ function runReview(parsed, { adversarial }) {
     return;
   }
 
+  const json = hasFlag(parsed, "json");
   const prompt = adversarial
-    ? buildAdversarialReviewPrompt(target, focus)
-    : buildReviewPrompt(target, focus);
+    ? buildAdversarialReviewPrompt(target, focus, { json })
+    : buildReviewPrompt(target, focus, { json });
   // Reviews are contained + read-capable but should not modify the tree.
   const reviewParsed = { ...parsed, flags: { ...parsed.flags, sandbox: true } };
   runAgyTask(reviewParsed, {

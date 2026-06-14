@@ -1,5 +1,18 @@
 // Prompt builders for code review. Pure functions, unit-tested. Each embeds the
 // git diff (resolved by lib/git.mjs) and asks agy (Gemini) to review it read-only.
+//
+// With { json: true } the prompt asks for a single JSON object matching
+// schemas/review-output.schema.json (best-effort structured output, parity with
+// codex-plugin-cc's review schema).
+
+function jsonContract() {
+  return [
+    "",
+    "OUTPUT FORMAT: Return ONLY a single valid JSON object — no prose, no markdown fences — matching this shape:",
+    '{"verdict": "approve" | "needs-attention", "summary": string, "findings": [{"severity": "critical"|"high"|"medium"|"low", "title": string, "body": string, "file": string, "line_start": number, "line_end": number, "confidence": number /* 0..1 */, "recommendation": string}], "next_steps": string[]}',
+    'Use "needs-attention" if there is any material risk worth blocking on; otherwise "approve". Every finding must cite a concrete file and line range from the diff.',
+  ].join("\n");
+}
 
 function diffBlock(target) {
   return [
@@ -15,7 +28,7 @@ function diffBlock(target) {
 }
 
 /** Standard "second pair of eyes" review. */
-export function buildReviewPrompt(target, focus) {
+export function buildReviewPrompt(target, focus, { json = false } = {}) {
   return [
     "You are a meticulous senior code reviewer. Review ONLY the changes below. Do not modify any files.",
     focus ? `\nReviewer focus: ${focus}` : "",
@@ -24,6 +37,7 @@ export function buildReviewPrompt(target, focus) {
     "2. The most important issues first, each as: severity (critical/high/medium/low), file:line, what's wrong, and a concrete fix.",
     "3. Anything risky around correctness, security, error handling, concurrency, or data loss.",
     "4. A short list of suggested next steps.",
+    json ? jsonContract() : "",
     "\n" + diffBlock(target),
   ]
     .filter(Boolean)
@@ -35,7 +49,7 @@ export function buildReviewPrompt(target, focus) {
  * codex-plugin-cc's adversarial-review prompt: skeptical stance, attack-surface focus,
  * one strong finding over many weak ones.
  */
-export function buildAdversarialReviewPrompt(target, focus) {
+export function buildAdversarialReviewPrompt(target, focus, { json = false } = {}) {
   return [
     "You are performing an ADVERSARIAL code review. Your job is to break confidence in this change, not to validate it. Review ONLY the changes below. Do not modify any files.",
     "",
@@ -59,6 +73,7 @@ export function buildAdversarialReviewPrompt(target, focus) {
     "3. The key assumptions this change depends on, and where they could fail under real-world conditions.",
     "",
     "Stay grounded: every finding must be defensible from the diff below. Do not invent files, lines, or runtime behavior you cannot support. If the change looks safe, say so directly.",
+    json ? jsonContract() : "",
     "\n" + diffBlock(target),
   ]
     .filter(Boolean)
