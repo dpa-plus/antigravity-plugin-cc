@@ -2,6 +2,14 @@
 
 All notable changes to the `antigravity` plugin are documented here.
 
+## [0.2.1] — 2026-06-14
+
+### Changed
+- Rebranded to **dpa-plus**: authors, docs, README badges/credits, and manifests no
+  longer carry upstream branding. The MIT license attribution to the original author is
+  retained in `LICENSE` as required.
+- Fixed the stale "no `--model` flag" note in CONTRIBUTING (agy 1.0.8 has `--model`).
+
 ## [0.2.0] — 2026-06-14
 
 codex-plugin-cc parity for the Antigravity (`agy` / Gemini 3.5) companion. Verified against agy 1.0.8.

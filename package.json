@@ -1,6 +1,6 @@
 {
   "name": "antigravity-plugin-cc",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "type": "module",
   "description": "Use Google Antigravity (agy / Gemini 3.5) from inside Claude Code with codex-plugin-cc parity: delegate, review, adversarial-review, stop-review-gate, --model, --wait.",

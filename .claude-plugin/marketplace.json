@@ -6,13 +6,13 @@
   },
   "metadata": {
     "description": "Use Google Antigravity (the agy CLI, powered by Gemini 3.5) from inside Claude Code, with codex-plugin-cc parity: delegate, review, adversarial-review, an opt-in stop-review-gate, --model and --wait.",
-    "version": "0.2.0"
+    "version": "0.2.1"
   },
   "plugins": [
     {
       "name": "antigravity",
       "description": "Delegate to and review with Google's Antigravity CLI (agy / Gemini 3.5) without leaving Claude Code — codex-parity fork (adversarial-review, stop-review-gate, --model, --wait).",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "author": {
         "name": "dpa-plus",
         "url": "https://github.com/dpa-plus"
