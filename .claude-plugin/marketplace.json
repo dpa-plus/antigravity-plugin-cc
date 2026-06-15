@@ -5,7 +5,7 @@
     "url": "https://github.com/dpa-plus"
   },
   "metadata": {
-    "description": "Use Google Antigravity (the agy CLI, powered by Gemini 3.5) from inside Claude Code, with codex-plugin-cc parity: delegate, review, adversarial-review, an opt-in stop-review-gate, --model and --wait. Fork of Idun-Group/antigravity-plugin-cc.",
+    "description": "Use Google Antigravity (the agy CLI, powered by Gemini 3.5) from inside Claude Code, with codex-plugin-cc parity: delegate, review, adversarial-review, an opt-in stop-review-gate, --model and --wait.",
     "version": "0.2.0"
   },
   "plugins": [
@@ -14,8 +14,8 @@
       "description": "Delegate to and review with Google's Antigravity CLI (agy / Gemini 3.5) without leaving Claude Code — codex-parity fork (adversarial-review, stop-review-gate, --model, --wait).",
       "version": "0.2.0",
       "author": {
-        "name": "Idun Labs",
-        "url": "https://idunplatform.com"
+        "name": "dpa-plus",
+        "url": "https://github.com/dpa-plus"
       },
       "homepage": "https://github.com/dpa-plus/antigravity-plugin-cc",
       "license": "MIT",

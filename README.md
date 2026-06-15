@@ -7,9 +7,9 @@
 > Drive Google's Antigravity CLI (`agy`, powered by Gemini 3.5) without leaving Claude Code.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
-[![Built by Idun Labs](https://img.shields.io/badge/built%20by-Idun%20Labs-6E56CF.svg)](https://github.com/Idun-Group)
+[![Built by dpa-plus](https://img.shields.io/badge/built%20by-dpa--plus-6E56CF.svg)](https://github.com/dpa-plus)
 [![Powered by agy / Gemini 3.5](https://img.shields.io/badge/powered%20by-agy%20%2F%20Gemini%203.5-4285F4.svg)](https://antigravity.google/docs/cli-overview)
-[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Idun-Group/antigravity-plugin-cc/pulls)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/dpa-plus/antigravity-plugin-cc/pulls)
 
 A Claude Code plugin that hands work to `agy` — Google's Antigravity CLI — and brings the result back into your session. You stay in Claude Code; Gemini 3.5 becomes a second model on tap. Think of it as the Antigravity counterpart to [`openai/codex-plugin-cc`](https://github.com/openai/codex-plugin-cc).
 
@@ -32,7 +32,7 @@ Eight slash commands plus an opt-in review gate, all under the `/antigravity:` n
 
 **Opt-in stop-review-gate.** Turn it on with `/antigravity:setup --enable-gate` and Antigravity reviews the diff every time Claude tries to finish a code-changing turn, blocking the stop until issues are addressed — a cross-model safety net modeled on codex-plugin-cc. Off by default; fails safe (a broken/rate-limited gate always allows); hard kill-switch `ANTIGRAVITY_CC_NO_GATE=1`.
 
-> This is a **codex-parity fork** of [`Idun-Group/antigravity-plugin-cc`](https://github.com/Idun-Group/antigravity-plugin-cc) (MIT). It adds adversarial-review, the stop-review-gate, `--model`, `--wait`, `--json`, and agy 1.0.8 log-scanning hardening. See [`NOTICE`](NOTICE) and [`docs/codex-parity-spec.md`](docs/codex-parity-spec.md).
+> Brings the [`openai/codex-plugin-cc`](https://github.com/openai/codex-plugin-cc) experience to Antigravity: delegate, review, adversarial-review, an opt-in stop-review-gate, `--model`, `--wait`, and `--json`, with agy 1.0.8 log-scanning hardening. See [`docs/codex-parity-spec.md`](docs/codex-parity-spec.md).
 
 ---
 
@@ -80,8 +80,8 @@ In Claude Code you can do this without leaving the session — type `! agy`, com
 ## Install
 
 ```text
-/plugin marketplace add Idun-Group/antigravity-plugin-cc
-/plugin install antigravity@idun-antigravity
+/plugin marketplace add dpa-plus/antigravity-plugin-cc
+/plugin install antigravity@dpa-antigravity
 /antigravity:setup
 ```
 
@@ -194,7 +194,7 @@ This project lives on the **Claude Code side**: it lets Claude Code drive `agy`.
 
 ## Credits
 
-Built and maintained by **[Idun Labs](https://github.com/Idun-Group)** — makers of an [open-source platform for governing AI agents in production](https://idunplatform.com).
+Built and maintained by **[dpa-plus](https://github.com/dpa-plus)**.
 
 - Antigravity CLI docs → https://antigravity.google/docs/cli-overview
 - Inspiration → [`openai/codex-plugin-cc`](https://github.com/openai/codex-plugin-cc)

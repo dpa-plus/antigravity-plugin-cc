@@ -3,9 +3,9 @@
   "version": "0.2.0",
   "private": true,
   "type": "module",
-  "description": "Use Google Antigravity (agy / Gemini 3.5) from inside Claude Code with codex-plugin-cc parity: delegate, review, adversarial-review, stop-review-gate, --model, --wait. Fork of Idun-Group/antigravity-plugin-cc.",
+  "description": "Use Google Antigravity (agy / Gemini 3.5) from inside Claude Code with codex-plugin-cc parity: delegate, review, adversarial-review, stop-review-gate, --model, --wait.",
   "license": "MIT",
-  "author": "Idun Labs (https://idunplatform.com)",
+  "author": "dpa-plus (https://github.com/dpa-plus)",
   "homepage": "https://github.com/dpa-plus/antigravity-plugin-cc",
   "repository": {
     "type": "git",

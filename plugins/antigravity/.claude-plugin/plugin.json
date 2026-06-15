@@ -3,8 +3,8 @@
   "version": "0.2.0",
   "description": "Delegate to and review with Google's Antigravity CLI (agy / Gemini 3.5) without leaving Claude Code — codex-parity fork (adversarial-review, stop-review-gate, --model, --wait).",
   "author": {
-    "name": "Idun Labs",
-    "url": "https://idunplatform.com"
+    "name": "dpa-plus",
+    "url": "https://github.com/dpa-plus"
   },
   "homepage": "https://github.com/dpa-plus/antigravity-plugin-cc",
   "license": "MIT",

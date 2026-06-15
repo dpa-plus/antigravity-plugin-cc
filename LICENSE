@@ -1,6 +1,10 @@
 MIT License
 
-Copyright (c) 2026 Idun Labs (https://idunplatform.com)
+Copyright (c) 2026 dpa-plus
+
+Portions Copyright (c) 2026 Idun Labs — original author of the upstream
+antigravity-plugin-cc, from which this project was derived. Retained as required
+by the MIT License under which that work was distributed.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

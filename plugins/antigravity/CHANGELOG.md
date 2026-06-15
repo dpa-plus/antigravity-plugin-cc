@@ -4,7 +4,7 @@ All notable changes to the `antigravity` plugin are documented here.
 
 ## [0.2.0] — 2026-06-14
 
-codex-plugin-cc parity, as a fork of `Idun-Group/antigravity-plugin-cc`. Verified against agy 1.0.8.
+codex-plugin-cc parity for the Antigravity (`agy` / Gemini 3.5) companion. Verified against agy 1.0.8.
 
 ### Added
 - `/antigravity:adversarial-review` — red-team review that challenges whether the change should ship (ported from codex-plugin-cc's adversarial prompt). Read-only + sandboxed.

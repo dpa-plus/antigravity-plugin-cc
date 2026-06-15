@@ -38,4 +38,4 @@ Then show the review verbatim, then add a one-line summary of the most important
 - Antigravity is in preview with a quota. If the review comes back empty, you're likely rate-limited — the companion surfaces the reset time when it can. Wait it out and rerun.
 - First time? You need to be signed in to Antigravity once. Run `/antigravity:setup` to check, and if it reports you're not authed, type `! agy` to do the one-time Google OAuth in your browser.
 
-_Powered by Google Antigravity (`agy`, Gemini 3.5). Plugin by Idun Labs._
+_Powered by Google Antigravity (`agy`, Gemini 3.5). A dpa-plus plugin._
