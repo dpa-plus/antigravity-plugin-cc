@@ -1,6 +1,6 @@
 # Spec: codex-plugin-cc parity for Antigravity
 
-Status: approved (2026-06-14). Base: fork of `Idun-Group/antigravity-plugin-cc` @ v0.1.0.
+Status: approved (2026-06-14). Base: the upstream antigravity-plugin-cc @ v0.1.0.
 Goal: bring this Antigravity (`agy` / Gemini 3.5) companion to feature parity with OpenAI's
 `codex-plugin-cc`, so it behaves like the Codex plugin but drives `agy` instead.
 
@@ -80,8 +80,7 @@ is an isolated unit, following existing patterns. No MCP, no broker (agy has no 
 - Not required by the gate (the gate uses the ALLOW/BLOCK contract).
 
 ### 7. Docs / attribution
-- README + command docs for the new commands/flags; `CHANGELOG.md` entry; keep MIT + Idun Labs
-  attribution; add `NOTICE` noting the dpa-plus fork and changes.
+- README + command docs for the new commands/flags; `CHANGELOG.md` entry; keep the MIT license.
 
 ## Testing
 - Extend `tests/fake-agy.mjs` to optionally emit the benign startup block and to honor `--model`.

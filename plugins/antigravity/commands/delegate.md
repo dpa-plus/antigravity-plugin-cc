@@ -30,4 +30,4 @@ $ARGUMENTS
 - If the companion reports that `agy` is missing or you're not signed in, tell the user to run `/antigravity:setup` first.
 - Once the output is back, use the `antigravity-result-handling` skill to interpret it — if Gemini 3.5 edited files, verify the changes with `git diff`; if it returned a quota or auth error, relay it clearly instead of treating the empty result as success.
 
-Built by Idun Labs.
+_Powered by Google Antigravity (`agy`, Gemini 3.5). A dpa-plus plugin._

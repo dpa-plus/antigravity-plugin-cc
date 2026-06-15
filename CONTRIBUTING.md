@@ -7,7 +7,7 @@ Contributions that keep it thin, honest, and dependency-free are very welcome.
 ## Repo layout
 
 ```
-.claude-plugin/marketplace.json      # marketplace "idun-antigravity" -> the plugin
+.claude-plugin/marketplace.json      # marketplace "dpa-antigravity" -> the plugin
 plugins/antigravity/
   commands/                          # /antigravity:<name> slash commands (.md)
   agents/                            # antigravity:antigravity-pair subagent (.md)
@@ -60,8 +60,9 @@ plugin for everyone.
 A few facts that must stay true (don't contradict them):
 
 - The binary is `agy`. Print mode is `agy -p`.
-- There is **no** `--model` / `-m` flag. The model is picked with `/model`
-  inside `agy` and persisted in `settings.json`. Never tell users to pass one.
+- agy 1.0.8+ accepts `--model <label>`; the companion probes `agy --help` and
+  passes it through when supported, otherwise the model is picked with `/model`
+  inside `agy` and persisted in `settings.json`.
 - `delegate` is write-capable by default; `--read-only` / `--sandbox` contain it.
 - `review` is always read-only and sandboxed.
 
@@ -87,4 +88,4 @@ A few facts that must stay true (don't contradict them):
 
 Questions or ideas? Open an issue first — happy to talk it through.
 
-Licensed MIT. Built and maintained by [Idun Labs](https://idunplatform.com).
+Licensed MIT. Built and maintained by [dpa-plus](https://github.com/dpa-plus).

@@ -38,4 +38,4 @@ This command is review-only: do not fix issues, apply patches, or imply you are 
 - Read-only and contained — Gemini sees the git diff embedded in the prompt and reports back. Nothing in your repo changes.
 - Antigravity is in preview with a quota. If the review comes back empty, you're likely rate-limited — the companion surfaces the reset time when it can.
 
-_Powered by Google Antigravity (`agy`, Gemini 3.5). Plugin by Idun Labs; codex-parity fork by dpa-plus._
+_Powered by Google Antigravity (`agy`, Gemini 3.5). A dpa-plus plugin._
