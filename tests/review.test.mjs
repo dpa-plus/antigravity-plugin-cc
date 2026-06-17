@@ -17,7 +17,7 @@ test("standard review prompt embeds the diff and asks for a verdict", () => {
   const p = buildReviewPrompt(target, "");
   assert.match(p, /senior code reviewer/i);
   assert.match(p, /Verdict/);
-  assert.match(p, /```diff/);
+  assert.match(p, /UNTRUSTED DIFF/);
   assert.match(p, /boom/);
   assert.doesNotMatch(p, /ADVERSARIAL/);
 });
@@ -27,7 +27,7 @@ test("adversarial prompt uses a skeptical, break-it framing", () => {
   assert.match(p, /ADVERSARIAL/);
   assert.match(p, /break confidence|DISPROVE|skepticism/i);
   assert.match(p, /DO-NOT-SHIP/);
-  assert.match(p, /```diff/);
+  assert.match(p, /UNTRUSTED DIFF/);
   assert.match(p, /boom/);
 });
 
