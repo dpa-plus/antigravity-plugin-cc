@@ -9,7 +9,7 @@ Push a follow-up to the most recent Antigravity conversation (or a specific one 
 Run exactly this and show the output verbatim:
 
 ```
-node "${CLAUDE_PLUGIN_ROOT}/scripts/antigravity.mjs" resume $ARGUMENTS
+node "${CLAUDE_PLUGIN_ROOT}/scripts/antigravity.mjs" resume "$ARGUMENTS"
 ```
 
 Present the companion's stdout as-is. Do not summarize, reformat, or add commentary. Use the `antigravity-result-handling` skill to interpret the output (response vs quota/auth/backend error) before acting on it. If a `--background` job was started, the output includes the job id — point the user at `/antigravity:status` and `/antigravity:result` to follow it.

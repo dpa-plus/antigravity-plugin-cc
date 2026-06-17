@@ -9,7 +9,7 @@ Get Gemini 3.5 to **attack** your change instead of just reviewing it. This runs
 Run the companion and present its output:
 
 ```
-node "${CLAUDE_PLUGIN_ROOT}/scripts/antigravity.mjs" adversarial-review $ARGUMENTS
+node "${CLAUDE_PLUGIN_ROOT}/scripts/antigravity.mjs" adversarial-review "$ARGUMENTS"
 ```
 
 Then show the review verbatim, then add a one-line summary of the single most important finding (if any). Use the `antigravity-result-handling` skill to interpret the companion output first — distinguish a real review from a quota/auth/backend error so you never present an empty result as a clean review.

@@ -42,7 +42,8 @@ export function goDurationToMs(value, fallbackMs = 5 * 60 * 1000) {
   if (typeof value !== "string" || !value.trim()) return fallbackMs;
   let total = 0;
   let matched = false;
-  const re = /(\d+(?:\.\d+)?)(h|m|s|ms)/g;
+  // Longest unit first so "500ms" matches ms, not m (minutes) then a stray s.
+  const re = /(\d+(?:\.\d+)?)(ms|h|m|s)/g;
   let m;
   while ((m = re.exec(value)) !== null) {
     matched = true;
