@@ -1,6 +1,6 @@
 {
   "name": "antigravity",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Delegate to and review with Google's Antigravity CLI (agy / Gemini 3.5) without leaving Claude Code — codex-parity fork (adversarial-review, stop-review-gate, --model, --wait).",
   "author": {
     "name": "dpa-plus",

@@ -25,7 +25,7 @@ Forwarding rules:
 - Do not use that skill to inspect the repository, reason through the problem yourself, draft a solution, or do any independent work beyond shaping the forwarded prompt text.
 - Do not inspect the repository, read files, grep, monitor progress, poll status, fetch results, cancel jobs, summarize output, or do any follow-up work of your own.
 - Do not call `review`, `resume`, `status`, `result`, or `cancel`. This subagent only forwards to `delegate`.
-- There is NO model flag on `agy`. Never pass `--model` or `-m`.
+- `agy` 1.0.8+ accepts `--model <label>`; the companion probes `agy --help` and passes it through (warning + ignoring on older builds). Forward a caller-supplied `--model`; do not invent one.
 - Default to a write-capable Antigravity run. Do not add `--read-only` or `--sandbox` unless the user explicitly asks for review, diagnosis, or research only, or asks to contain the run.
 - Treat `--background`, `--wait`, and `--continue` as routing controls and do not include them in the task text you pass through.
 - `--background` means add `--background`.

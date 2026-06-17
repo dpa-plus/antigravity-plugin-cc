@@ -36,11 +36,11 @@ The mistakes that waste a delegate run, and how to fix each. Grounded in Google'
 
 ---
 
-### 5. Asking for a model flag that doesn't exist
+### 5. Baking model selection into the task text
 
-**Mistake:** "Use Gemini 3.5 Pro for this," or expecting a `-m` / `--model` flag. There is none. The model is chosen with `/model` inside the `agy` TUI and persisted in settings.
+**Mistake:** Writing "Use Gemini 3.5 Pro for this" inside the prompt body. The model isn't chosen from prose.
 
-**Fix:** Don't put model selection in the task. If a heavier model is needed, the user changes it once with `/model` in `agy`; delegate runs then use that setting.
+**Fix:** Pass `--model <label>` (agy 1.0.8+; the companion probes support and warns+ignores on older builds), or set a default once with `/model` inside the `agy` TUI (persisted in `settings.json`). Keep the task text about the work, not the model. (The legacy `-m` short form doesn't exist; use `--model`.)
 
 ---
 

@@ -39,9 +39,9 @@ The companion owns binary detection, sandboxing, timeouts, the conversation id, 
 | `--add-dir <path>` | Grant access to an extra directory (repeatable). |
 | `--print-timeout <go-dur>` | Cap the print-mode run, e.g. `10m`, `90s`. |
 
-## No model flag — ever
+## Model selection (`--model`)
 
-`agy` has **no** `--model` / `-m` flag. The model (default Gemini 3.5 Flash) is selected with `/model` inside the `agy` TUI and persisted in `settings.json`. Never add a model flag to a `delegate` call and never tell the user to pass one.
+`agy` 1.0.8+ accepts `--model <label>`. Models are referenced by **label** (e.g. `Gemini 3.5 Flash (High)`; list them with `agy models`). The companion probes `agy --help` (`agySupportsModel`) and passes `--model` through when supported, warning + ignoring it on older builds (≤1.0.3) where the model is instead chosen with `/model` inside the TUI and persisted in `settings.json`. Forward a caller-supplied `--model`; don't invent one. Note: agy silently ignores an unknown label (it falls back to the default), so pass a label from `agy models`.
 
 ## Other subcommands (not for this subagent)
 

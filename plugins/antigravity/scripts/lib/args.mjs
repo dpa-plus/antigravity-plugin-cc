@@ -12,7 +12,7 @@ const VALUED_FLAGS = new Set([
   "base",
   "conversation",
   "print-timeout",
-  "model", // accepted + warned about; agy has no model flag (see docs)
+  "model", // passed through when the agy build supports --model (probed via agySupportsModel)
 ]);
 
 const REPEATABLE_VALUED_FLAGS = new Set(["add-dir"]);
@@ -20,6 +20,18 @@ const REPEATABLE_VALUED_FLAGS = new Set(["add-dir"]);
 const BOOLEAN_ALIASES = {
   c: "continue",
 };
+
+function isFlagToken(token) {
+  return typeof token === "string" && token.startsWith("-") && token.length > 1 && !/^-\d/.test(token);
+}
+
+// The value for a valued flag is the next token — but only if it exists and isn't itself
+// a flag. `--base --background` must NOT consume `--background` as base's value.
+function consumeValue(argv, i) {
+  const next = argv[i + 1];
+  if (next === undefined || isFlagToken(next)) return undefined;
+  return next;
+}
 
 export function parseArgs(argv) {
   const flags = {};
@@ -47,15 +59,20 @@ export function parseArgs(argv) {
       }
 
       if (REPEATABLE_VALUED_FLAGS.has(name)) {
-        const value = inlineValue ?? argv[++i];
+        const value = inlineValue ?? consumeValue(argv, i);
         if (value !== undefined) {
           (repeated[name] ||= []).push(value);
+          if (inlineValue === undefined) i += 1;
         }
         continue;
       }
 
       if (VALUED_FLAGS.has(name)) {
-        valued[name] = inlineValue ?? argv[++i];
+        const value = inlineValue ?? consumeValue(argv, i);
+        if (value !== undefined) {
+          valued[name] = value;
+          if (inlineValue === undefined) i += 1;
+        }
         continue;
       }
 

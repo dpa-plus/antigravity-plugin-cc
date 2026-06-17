@@ -10,7 +10,7 @@ Goal: bring this Antigravity (`agy` / Gemini 3.5) companion to feature parity wi
   empty-stdout bug is gone on 1.0.8).
 - `agy --model <value>` **is** a real flag. Models are referenced by **label**
   (`settings.json` → `"model": "Gemini 3.5 Flash (High)"`). There is **no** `--effort` flag.
-- `agy models` **hangs** in a non-TTY (no output) — do not call it from the companion.
+- `agy models` was observed to **hang** in a non-TTY on 1.0.8 (no output; had to be killed); it reportedly exits cleanly on 1.0.9. Treat it as unreliable across builds — the companion does not depend on it, and an unknown `--model` label is silently ignored by agy (falls back to the default).
 - Conversation id appears in `--log-file` as `Created conversation <uuid>` and
   `Print mode: conversation=<uuid>` — `logscan` already extracts both. ✅ still valid.
 - **Benign-error trap (real bug):** on *every successful* run, agy logs ~30 `E…`-level lines

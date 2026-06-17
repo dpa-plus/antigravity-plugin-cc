@@ -9,7 +9,7 @@ Get a second pair of eyes on your work. This runs a **read-only** review of your
 Run the companion and present its output:
 
 ```
-node "${CLAUDE_PLUGIN_ROOT}/scripts/antigravity.mjs" review $ARGUMENTS
+node "${CLAUDE_PLUGIN_ROOT}/scripts/antigravity.mjs" review "$ARGUMENTS"
 ```
 
 Then show the review verbatim, then add a one-line summary of the most important finding (if any). Use the `antigravity-result-handling` skill to interpret the companion output first — distinguish a real review from a quota/auth/backend error so you never present an empty result as a clean review.

@@ -7,7 +7,7 @@ allowed-tools: Bash(node:*), Bash(curl:*), Bash(bash:*), AskUserQuestion
 Detect the state of the Antigravity CLI. Run exactly this (forward `$ARGUMENTS` so any gate toggle is applied):
 
 ```bash
-node "${CLAUDE_PLUGIN_ROOT}/scripts/antigravity.mjs" setup --json $ARGUMENTS
+node "${CLAUDE_PLUGIN_ROOT}/scripts/antigravity.mjs" setup --json "$ARGUMENTS"
 ```
 
 Read the JSON: `{ ready, installed, binaryPath, version, authedGuess, configDir, gate }`.
@@ -34,7 +34,7 @@ curl -fsSL https://antigravity.google/cli/install.sh | bash
 - Then rerun the detection:
 
 ```bash
-node "${CLAUDE_PLUGIN_ROOT}/scripts/antigravity.mjs" setup --json $ARGUMENTS
+node "${CLAUDE_PLUGIN_ROOT}/scripts/antigravity.mjs" setup --json "$ARGUMENTS"
 ```
 
 - If the user picks skip, don't install. Move on to the output step with the original result.
@@ -46,7 +46,7 @@ node "${CLAUDE_PLUGIN_ROOT}/scripts/antigravity.mjs" setup --json $ARGUMENTS
 **Final output** — present the human-readable setup by running the same command without `--json`:
 
 ```bash
-node "${CLAUDE_PLUGIN_ROOT}/scripts/antigravity.mjs" setup $ARGUMENTS
+node "${CLAUDE_PLUGIN_ROOT}/scripts/antigravity.mjs" setup "$ARGUMENTS"
 ```
 
 Show that output to the user. If installation was skipped, show the original detection result instead. Don't invent flags or claim a sign-in you didn't verify.

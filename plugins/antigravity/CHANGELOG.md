@@ -2,6 +2,34 @@
 
 All notable changes to the `antigravity` plugin are documented here.
 
+## [0.3.0] — 2026-06-15
+
+Public-readiness hardening (security + parity), informed by a multi-agent audit and an independent Codex review.
+
+### Security
+- Hardened the stop-review gate and review prompts against prompt-injection via diff content: untrusted diffs/messages are wrapped in per-call crypto-nonce delimiters with data-not-instructions framing, and the ALLOW/BLOCK contract is re-asserted last (`lib/untrusted.mjs`).
+- Read-only paths (`review`/`adversarial-review`/`--read-only`) no longer emit `--dangerously-skip-permissions` (yolo is forced off when contained).
+- Quoted `"$ARGUMENTS"` in every command doc (shell-metacharacter safety).
+- CI actions pinned to commit SHAs + least-privilege `permissions: contents: read`; added Dependabot.
+
+### Fixed
+- Foreground / `--wait` job output is persisted, so `/antigravity:result` no longer false-fails on a finished foreground job.
+- `args.mjs`: a valued flag no longer swallows a following `--flag` or over-consumes past the end of argv.
+- `goDurationToMs`: `500ms` is milliseconds, not minutes (longest-unit-first).
+- `clampPrompt` truncates on a UTF-8 boundary (no mojibake); job IDs use `crypto.randomBytes` (supersedes PR #11).
+- setup auth heuristic matches SQLite `*.db` conversations; `agySupportsModel` no longer caches transient probe failures.
+
+### Changed / parity
+- Corrected the `--model` story across all agent/skill/reference docs (agy 1.0.8+ has `--model <label>`).
+- Job dir pruned to the newest 50; new SessionStart/SessionEnd hook reconciles stale jobs and reaps this session's detached background jobs.
+- `review --base` now embeds untracked (new) file content too.
+
+### Privacy
+- Redacted personal data (email, paths, IDs) from the captured test fixture; documented that `delegate`/`review` send working-directory content to Google's Antigravity.
+
+### Tests
+- 93 tests (`node --test`); CI on Node 18/20/22.
+
 ## [0.2.1] — 2026-06-14
 
 ### Changed

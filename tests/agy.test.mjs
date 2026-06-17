@@ -83,3 +83,9 @@ test("goDurationToMs falls back on garbage", () => {
   assert.equal(goDurationToMs("not-a-duration", 123), 123);
   assert.equal(goDurationToMs("", 456), 456);
 });
+
+test("goDurationToMs parses ms as milliseconds, not minutes", () => {
+  assert.equal(goDurationToMs("500ms"), 500);
+  assert.equal(goDurationToMs("250ms", 9), 250);
+  assert.equal(goDurationToMs("1h30m"), 5400000);
+});

@@ -8,7 +8,7 @@
 // Subcommands: setup | delegate | review | resume | status | result | cancel
 //   (aliases: run -> delegate)
 
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { parseArgs, hasFlag } from "./lib/args.mjs";
@@ -36,8 +36,7 @@ import {
   cancelJob,
 } from "./lib/jobs.mjs";
 import * as render from "./lib/render.mjs";
-
-const MAX_PROMPT_BYTES = 100 * 1024;
+import { clampPrompt } from "./lib/text.mjs";
 
 function out(text) {
   process.stdout.write(text.endsWith("\n") ? text : `${text}\n`);
@@ -50,12 +49,6 @@ function requireBinaryOrExit() {
     process.exit(0);
   }
   return bin;
-}
-
-function clampPrompt(prompt) {
-  const buf = Buffer.from(prompt, "utf8");
-  if (buf.length <= MAX_PROMPT_BYTES) return prompt;
-  return `${buf.subarray(0, MAX_PROMPT_BYTES).toString("utf8")}\n\n[...truncated by antigravity-plugin-cc: prompt exceeded ${MAX_PROMPT_BYTES} bytes...]`;
 }
 
 // ---------------------------------------------------------------------------
@@ -73,7 +66,8 @@ function cmdSetup(parsed) {
   const installationId = existsSync(join(configDir, "installation_id"));
   const hasConversations =
     existsSync(join(configDir, "conversations")) &&
-    safeReaddir(join(configDir, "conversations")).some((f) => f.endsWith(".pb"));
+    // agy 1.0.8+ stores conversations as SQLite *.db; older builds used *.pb.
+    safeReaddir(join(configDir, "conversations")).some((f) => f.endsWith(".db") || f.endsWith(".pb"));
 
   const version = bin ? agyVersion(bin.path) : null;
   // Best-effort auth signal: we never log you in. Presence of prior threads or an
@@ -146,7 +140,11 @@ function runAgyTask(parsed, { kind, title, prompt, readOnly, resume }) {
   const cwd = process.cwd();
 
   const sandbox = hasFlag(parsed, "sandbox") || Boolean(readOnly);
-  const yolo = !hasFlag(parsed, "no-yolo"); // write-capable by default; contained if sandbox
+  // Read-only invocations (review / adversarial-review / --read-only) must NEVER auto-approve
+  // tool permissions — otherwise a "read-only" run still sends --dangerously-skip-permissions
+  // and containment would depend on agy's undocumented flag precedence. Write paths
+  // (delegate/resume) stay write-capable by default; --no-yolo opts out.
+  const yolo = readOnly ? false : !hasFlag(parsed, "no-yolo");
   const continueLast = resume && !parsed.valued.conversation ? true : hasFlag(parsed, "continue");
   const conversationId = parsed.valued.conversation || null;
   const printTimeout = parsed.valued["print-timeout"] || "10m";
@@ -211,6 +209,13 @@ function runAgyTask(parsed, { kind, title, prompt, readOnly, resume }) {
   const responseText = result.stdout.trim();
   if (responseText) {
     job.status = "done";
+    // Persist the output so a later /antigravity:result on this finished job returns the
+    // response instead of false-failing (foreground jobs never wrote output.txt before).
+    try {
+      writeFileSync(job.paths.output, responseText);
+    } catch {
+      /* non-fatal: result is still shown inline below */
+    }
     writeJob(job);
     out(render.renderResponse(responseText, { title, conversationId: job.conversationId }));
     return;
@@ -332,8 +337,14 @@ function runJsonReview(parsed, { adversarial, target }) {
   const parsedJson = parseReviewJson(text);
   if (parsedJson.ok) {
     job.status = "done";
+    const rendered = JSON.stringify(parsedJson.data, null, 2);
+    try {
+      writeFileSync(job.paths.output, rendered);
+    } catch {
+      /* non-fatal */
+    }
     writeJob(job);
-    out(JSON.stringify(parsedJson.data, null, 2));
+    out(rendered);
     return;
   }
 

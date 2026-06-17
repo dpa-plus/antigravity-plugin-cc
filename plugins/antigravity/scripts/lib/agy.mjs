@@ -42,7 +42,8 @@ export function goDurationToMs(value, fallbackMs = 5 * 60 * 1000) {
   if (typeof value !== "string" || !value.trim()) return fallbackMs;
   let total = 0;
   let matched = false;
-  const re = /(\d+(?:\.\d+)?)(h|m|s|ms)/g;
+  // Longest unit first so "500ms" matches ms, not m (minutes) then a stray s.
+  const re = /(\d+(?:\.\d+)?)(ms|h|m|s)/g;
   let m;
   while ((m = re.exec(value)) !== null) {
     matched = true;
@@ -121,15 +122,17 @@ export function spawnBackground({ bin, args, cwd, outputFile, errFile }) {
 const _modelSupport = new Map();
 export function agySupportsModel(bin) {
   if (_modelSupport.has(bin)) return _modelSupport.get(bin);
-  let supported = false;
   try {
     const res = spawnSync(bin, ["--help"], { encoding: "utf8", timeout: 15000 });
-    supported = /(^|\s)--model\b/.test(`${res.stdout || ""}${res.stderr || ""}`);
+    // Transient failure (spawn error / timeout): do NOT cache, so a one-off blip
+    // doesn't silently disable --model for the rest of the process.
+    if (res.error || res.status === null) return false;
+    const supported = /(^|\s)--model\b/.test(`${res.stdout || ""}${res.stderr || ""}`);
+    _modelSupport.set(bin, supported);
+    return supported;
   } catch {
-    supported = false;
+    return false;
   }
-  _modelSupport.set(bin, supported);
-  return supported;
 }
 
 /** Quick `agy --version`. Returns version string or null. */

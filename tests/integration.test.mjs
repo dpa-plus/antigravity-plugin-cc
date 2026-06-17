@@ -83,6 +83,55 @@ test("empty output (exit 0, no response, no log error) is surfaced as a failure,
   assert.match(stdout, /Retry/i);
 });
 
+function capturedArgv(args, { mode = "success" } = {}) {
+  const argvOut = join(mkdtempSync(join(tmpdir(), "agy-argv-")), "argv.json");
+  const cwd = mkdtempSync(join(tmpdir(), "agy-cwd-"));
+  const env = {
+    ...process.env,
+    ANTIGRAVITY_CC_AGY_BIN: FAKE_AGY,
+    ANTIGRAVITY_CC_HOME: mkdtempSync(join(tmpdir(), "agy-home-")),
+    FAKE_AGY_MODE: mode,
+    FAKE_AGY_ARGV_OUT: argvOut,
+  };
+  execFileSync("node", [COMPANION, ...args], { cwd, env, encoding: "utf8" });
+  return JSON.parse(execFileSync("cat", [argvOut], { encoding: "utf8" }));
+}
+
+test("read-only review never sends --dangerously-skip-permissions (it IS sandboxed)", () => {
+  const cwd = gitRepo();
+  const argvOut = join(mkdtempSync(join(tmpdir(), "agy-argv-")), "argv.json");
+  const env = {
+    ...process.env,
+    ANTIGRAVITY_CC_AGY_BIN: FAKE_AGY,
+    ANTIGRAVITY_CC_HOME: mkdtempSync(join(tmpdir(), "agy-home-")),
+    FAKE_AGY_MODE: "success",
+    FAKE_AGY_ARGV_OUT: argvOut,
+  };
+  execFileSync("node", [COMPANION, "review"], { cwd, env, encoding: "utf8" });
+  const argv = JSON.parse(execFileSync("cat", [argvOut], { encoding: "utf8" }));
+  assert.ok(argv.includes("--sandbox"), "review is sandboxed");
+  assert.ok(!argv.includes("--dangerously-skip-permissions"), "read-only review must NOT auto-approve permissions");
+});
+
+test("delegate is write-capable by default, but --read-only drops --dangerously-skip-permissions", () => {
+  const plain = capturedArgv(["delegate", "do a thing"]);
+  assert.ok(plain.includes("--dangerously-skip-permissions"), "default delegate is write-capable");
+  assert.ok(!plain.includes("--sandbox"));
+  const ro = capturedArgv(["delegate", "--read-only", "look only"]);
+  assert.ok(!ro.includes("--dangerously-skip-permissions"), "--read-only must not auto-approve permissions");
+  assert.ok(ro.includes("--sandbox"));
+});
+
+test("/antigravity:result returns a finished FOREGROUND job's output (output.txt persisted)", () => {
+  const home = mkdtempSync(join(tmpdir(), "agy-home-"));
+  const cwd = mkdtempSync(join(tmpdir(), "agy-cwd-"));
+  const env = { ...process.env, ANTIGRAVITY_CC_AGY_BIN: FAKE_AGY, ANTIGRAVITY_CC_HOME: home, FAKE_AGY_MODE: "success" };
+  execFileSync("node", [COMPANION, "delegate", "remember this"], { cwd, env, encoding: "utf8" });
+  const result = execFileSync("node", [COMPANION, "result"], { cwd, env, encoding: "utf8" });
+  assert.match(result, /Gemini 3 \(fake\) reply/);
+  assert.match(result, /remember this/);
+});
+
 test("delegate --wait returns the result inline (synchronous foreground)", () => {
   const { stdout } = run(["delegate", "wait for me", "--wait"], { mode: "success" });
   assert.match(stdout, /Gemini 3 \(fake\) reply/);

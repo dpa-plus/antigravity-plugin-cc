@@ -36,6 +36,17 @@ function valueOf(flag) {
   return i !== -1 ? argv[i + 1] : null;
 }
 
+// Capture the exact argv of a real (print-mode) invocation so tests can assert which
+// flags reached agy (e.g. that read-only review never sends --dangerously-skip-permissions).
+// Only print runs reach here — --version/--help exit above, so the probe doesn't clobber it.
+if (process.env.FAKE_AGY_ARGV_OUT) {
+  try {
+    writeFileSync(process.env.FAKE_AGY_ARGV_OUT, JSON.stringify(argv));
+  } catch {
+    /* ignore */
+  }
+}
+
 const logFile = valueOf("--log-file");
 const model = valueOf("--model");
 // prompt is the last token (companion always puts `-p <prompt>` last)

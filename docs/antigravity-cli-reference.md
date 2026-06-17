@@ -1,7 +1,7 @@
 # Antigravity CLI (`agy`) — grounded reference
 
-> Everything in this file was verified against `agy --version 1.0.3` and the live
-> `agy` runtime on macOS (May 2026), plus the official docs at
+> Everything in this file was verified against `agy --version 1.0.8` (spot-checked on
+> 1.0.9) and the live `agy` runtime on macOS, plus the official docs at
 > <https://antigravity.google/docs/cli-overview>. This is the contract the plugin
 > is built against. If a future `agy` release changes a flag, update this file and
 > `plugins/antigravity/scripts/lib/agy.mjs` together.
@@ -62,10 +62,13 @@ From `agy --help` (verbatim flag set, v1.0.3):
 
 Subcommands: `changelog`, `help`, `install`, `plugin`/`plugins`, `update`.
 
-**There is NO `--model` / `-m` flag.** (A widely-shared blog post claims `agy -m`;
-it does not exist in v1.0.3.) The model is chosen with `/model` inside the TUI and
-persisted in `settings.json`. The plugin therefore does not pass a model flag; it
-documents how to set the default model instead.
+**`--model <label>` (agy 1.0.8+).** Models are referenced by label (e.g.
+`Gemini 3.5 Flash (High)`; list them with `agy models`). The companion probes
+`agy --help` (`agySupportsModel`) and passes `--model` through when supported, warning +
+ignoring it on older builds (≤1.0.3, which have no such flag — there the model is chosen
+with `/model` inside the TUI and persisted in `settings.json`). Note: agy silently ignores
+an *unknown* label and falls back to its default, so pass a label that `agy models` lists.
+(The legacy `-m` short form does not exist.)
 
 ## Critical runtime behavior (verified live)
 

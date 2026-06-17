@@ -48,3 +48,16 @@ test("hasFlag matches any alias", () => {
   assert.equal(hasFlag(p, "background", "wait"), true);
   assert.equal(hasFlag(p, "background"), false);
 });
+
+test("a valued flag does not swallow a following flag", () => {
+  const p = parseArgs(["--base", "--background", "fix the bug"]);
+  assert.equal(p.valued.base, undefined, "base must not consume --background");
+  assert.equal(p.flags.background, true);
+  assert.equal(p.text, "fix the bug");
+});
+
+test("a trailing valued flag with no value is left unset (no over-consume past end)", () => {
+  const p = parseArgs(["review", "--base"]);
+  assert.equal(p.valued.base, undefined);
+  assert.deepEqual(p.positionals, ["review"]);
+});
