@@ -10,6 +10,7 @@ import {
   rmSync,
   statSync,
 } from "node:fs";
+import { randomBytes } from "node:crypto";
 import { join } from "node:path";
 import { jobsRoot, jobDir } from "./paths.mjs";
 import { readLogSafe } from "./agy.mjs";
@@ -21,7 +22,7 @@ function nowIso() {
 
 export function newJobId() {
   const ts = Date.now().toString(36);
-  const rand = Math.random().toString(36).slice(2, 8);
+  const rand = randomBytes(6).toString("hex");
   return `agy-${ts}-${rand}`;
 }
 

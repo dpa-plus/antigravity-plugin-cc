@@ -192,6 +192,10 @@ This project lives on the **Claude Code side**: it lets Claude Code drive `agy`.
 
 ---
 
+## Privacy & data
+
+`/antigravity:delegate`, `/antigravity:review`, and `/antigravity:adversarial-review` send your working-directory contents and/or git diffs to **Google's Antigravity** (`agy`, Gemini 3.5) under **your own** Google account — that's how the second-model pass works. Nothing is sent anywhere else; the plugin has no servers and no telemetry. The optional stop-review-gate (off by default) sends the turn's diff to Antigravity when enabled. The `ANTIGRAVITY_CC_AGY_BIN` env var runs whatever `agy` binary it points at, so only set it to a trusted path.
+
 ## Credits
 
 Built and maintained by **[dpa-plus](https://github.com/dpa-plus)**.

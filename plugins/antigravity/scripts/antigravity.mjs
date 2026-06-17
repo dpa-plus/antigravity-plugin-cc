@@ -36,8 +36,7 @@ import {
   cancelJob,
 } from "./lib/jobs.mjs";
 import * as render from "./lib/render.mjs";
-
-const MAX_PROMPT_BYTES = 100 * 1024;
+import { clampPrompt } from "./lib/text.mjs";
 
 function out(text) {
   process.stdout.write(text.endsWith("\n") ? text : `${text}\n`);
@@ -50,12 +49,6 @@ function requireBinaryOrExit() {
     process.exit(0);
   }
   return bin;
-}
-
-function clampPrompt(prompt) {
-  const buf = Buffer.from(prompt, "utf8");
-  if (buf.length <= MAX_PROMPT_BYTES) return prompt;
-  return `${buf.subarray(0, MAX_PROMPT_BYTES).toString("utf8")}\n\n[...truncated by antigravity-plugin-cc: prompt exceeded ${MAX_PROMPT_BYTES} bytes...]`;
 }
 
 // ---------------------------------------------------------------------------
