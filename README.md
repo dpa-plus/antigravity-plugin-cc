@@ -6,8 +6,10 @@
 
 > Drive Google's Antigravity CLI (`agy`, powered by Gemini 3.5) without leaving Claude Code.
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
-[![Built by dpa-plus](https://img.shields.io/badge/built%20by-dpa--plus-6E56CF.svg)](https://github.com/dpa-plus)
+[![CI](https://github.com/dpa-plus/antigravity-plugin-cc/actions/workflows/ci.yml/badge.svg)](https://github.com/dpa-plus/antigravity-plugin-cc/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/dpa-plus/antigravity-plugin-cc?sort=semver&color=6E56CF)](https://github.com/dpa-plus/antigravity-plugin-cc/releases)
+[![License: MIT](https://img.shields.io/github/license/dpa-plus/antigravity-plugin-cc?color=green)](./LICENSE)
+[![Node ≥18](https://img.shields.io/badge/node-%E2%89%A518-339933.svg)](./package.json)
 [![Powered by agy / Gemini 3.5](https://img.shields.io/badge/powered%20by-agy%20%2F%20Gemini%203.5-4285F4.svg)](https://antigravity.google/docs/cli-overview)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/dpa-plus/antigravity-plugin-cc/pulls)
 
