@@ -73,7 +73,8 @@ function cmdSetup(parsed) {
   const installationId = existsSync(join(configDir, "installation_id"));
   const hasConversations =
     existsSync(join(configDir, "conversations")) &&
-    safeReaddir(join(configDir, "conversations")).some((f) => f.endsWith(".pb"));
+    // agy 1.0.8+ stores conversations as SQLite *.db; older builds used *.pb.
+    safeReaddir(join(configDir, "conversations")).some((f) => f.endsWith(".db") || f.endsWith(".pb"));
 
   const version = bin ? agyVersion(bin.path) : null;
   // Best-effort auth signal: we never log you in. Presence of prior threads or an
