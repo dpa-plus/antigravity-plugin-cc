@@ -81,7 +81,13 @@ export function resolveReviewTarget(cwd, base) {
     const diff = git(["diff", "--no-color", range], cwd).stdout;
     const stat = git(["diff", "--stat", range], cwd).stdout;
     const working = git(["diff", "--no-color", "HEAD"], cwd).stdout;
-    const combined = [diff, working ? `\n# Uncommitted working-tree changes:\n${working}` : ""].join("");
+    const untrackedNames = git(["ls-files", "--others", "--exclude-standard"], cwd).stdout;
+    const untracked = untrackedNames ? untrackedDiffs(cwd, untrackedNames.split(/\r?\n/).filter(Boolean)) : "";
+    const combined = [
+      diff,
+      working ? `\n# Uncommitted working-tree changes:\n${working}` : "",
+      untracked ? `\n# Untracked (new) files:\n${untracked}` : "",
+    ].join("");
     return {
       ok: combined.trim().length > 0,
       label: `${base}...HEAD (+ working tree)`,

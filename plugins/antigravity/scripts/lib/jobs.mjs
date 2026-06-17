@@ -7,6 +7,7 @@ import {
   readFileSync,
   existsSync,
   readdirSync,
+  rmSync,
   statSync,
 } from "node:fs";
 import { join } from "node:path";
@@ -48,13 +49,36 @@ export function createJob(meta, env = process.env) {
     status: meta.status || "running",
     pid: meta.pid ?? null,
     conversationId: meta.conversationId ?? null,
+    // Best-effort Claude session id so SessionEnd can reap this job's detached process.
+    sessionId: meta.sessionId ?? env.CLAUDE_SESSION_ID ?? null,
     startedAt: meta.startedAt || nowIso(),
     finishedAt: meta.finishedAt ?? null,
     error: meta.error ?? null,
     paths,
   };
   writeFileSync(paths.meta, JSON.stringify(record, null, 2));
+  pruneJobs(env);
   return record;
+}
+
+// Keep the jobs dir bounded: retain the newest MAX_JOBS, delete older TERMINAL jobs
+// (never a still-running one). Prevents ~/.antigravity-cc/jobs growing without limit.
+const MAX_JOBS = 50;
+export function pruneJobs(env = process.env) {
+  const root = jobsRoot(env);
+  if (!existsSync(root)) return;
+  const all = readdirSync(root)
+    .map((name) => readJob(name, env))
+    .filter(Boolean)
+    .sort((a, b) => (a.startedAt < b.startedAt ? 1 : -1));
+  for (const job of all.slice(MAX_JOBS)) {
+    if (job.status === "running") continue;
+    try {
+      rmSync(job.paths.dir, { recursive: true, force: true });
+    } catch {
+      /* ignore */
+    }
+  }
 }
 
 export function writeJob(job) {
