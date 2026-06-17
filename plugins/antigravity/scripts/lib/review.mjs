@@ -62,13 +62,15 @@ export function buildReviewPrompt(target, focus, { json = false } = {}) {
   return [
     "You are a meticulous senior code reviewer. Review ONLY the changes below. Do not modify any files.",
     focus ? `\nReviewer focus: ${focus}` : "",
+    "\n" + diffBlock(target),
+    // Output contract AFTER the untrusted diff so the trusted instruction is what the model
+    // reads last (and can't be steered by content embedded in the diff).
     "\nReturn a concise review with:",
     "1. Verdict (ship / ship with nits / needs work).",
     "2. The most important issues first, each as: severity (critical/high/medium/low), file:line, what's wrong, and a concrete fix.",
     "3. Anything risky around correctness, security, error handling, concurrency, or data loss.",
     "4. A short list of suggested next steps.",
     json ? jsonContract() : "",
-    "\n" + diffBlock(target),
   ]
     .filter(Boolean)
     .join("\n");
@@ -96,15 +98,15 @@ export function buildAdversarialReviewPrompt(target, focus, { json = false } = {
     focus ? `\nWeight this focus area heavily, but still report any other material issue: ${focus}` : "",
     "",
     "Method: actively try to DISPROVE the change. Look for violated invariants, missing guards, unhandled failure paths, and assumptions that stop being true under stress. Trace how bad inputs, retries, concurrent actions, or partially completed operations move through the code.",
+    "\n" + diffBlock(target),
+    // Output contract AFTER the untrusted diff (trusted instruction read last).
+    "\nStay grounded: every finding must be defensible from the diff above. Do not invent files, lines, or runtime behavior you cannot support. If the change looks safe, say so directly.",
     "",
     "Return:",
     "1. Verdict: SHIP or DO-NOT-SHIP — be decisive.",
     "2. The strongest findings first (prefer one well-supported finding over several weak ones). For each: severity, file:line, what can go wrong, why this path is vulnerable, the likely impact, and a concrete fix.",
     "3. The key assumptions this change depends on, and where they could fail under real-world conditions.",
-    "",
-    "Stay grounded: every finding must be defensible from the diff below. Do not invent files, lines, or runtime behavior you cannot support. If the change looks safe, say so directly.",
     json ? jsonContract() : "",
-    "\n" + diffBlock(target),
   ]
     .filter(Boolean)
     .join("\n");

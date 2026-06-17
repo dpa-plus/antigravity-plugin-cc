@@ -48,15 +48,27 @@ export function buildGatePrompt(target, lastAssistantMessage) {
  * @returns {{ block: boolean, reason: string|null, parsed: boolean }}
  */
 export function parseGateDecision(text) {
-  const line = String(text || "")
+  // Only the FIRST non-blank line counts as the verdict. Scanning the whole output would
+  // let a buried/echoed "ALLOW:" (e.g. injected via diff content) slip past a real BLOCK.
+  const firstLine = String(text || "")
     .split(/\r?\n/)
     .map((s) => s.trim())
-    .find((s) => /^(ALLOW|BLOCK):/i.test(s));
+    .find((s) => s.length > 0);
 
-  if (!line) return { block: false, reason: null, parsed: false };
-  if (/^BLOCK:/i.test(line)) {
-    const reason = line.replace(/^BLOCK:\s*/i, "").trim();
+  if (firstLine && /^ALLOW:/i.test(firstLine)) {
+    return { block: false, reason: null, parsed: true };
+  }
+  if (firstLine && /^BLOCK:/i.test(firstLine)) {
+    const reason = firstLine.replace(/^BLOCK:\s*/i, "").trim();
     return { block: true, reason: reason || "the review found an issue that should be fixed before stopping", parsed: true };
   }
-  return { block: false, reason: null, parsed: true };
+  // Non-empty output whose first line is NOT a clean verdict: fail SAFE → block, so a model
+  // that omits/buries its verdict (or echoes injected content) can't slip an ALLOW through.
+  // (Operational failures — empty stdout / agy error / timeout — are handled in the hook,
+  // which fails OPEN there so a broken tool never traps the user.)
+  return {
+    block: true,
+    reason: "the review did not return a clean ALLOW/BLOCK verdict on its first line",
+    parsed: false,
+  };
 }

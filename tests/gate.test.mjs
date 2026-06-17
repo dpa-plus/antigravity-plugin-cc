@@ -43,10 +43,21 @@ test("parseGateDecision tolerates a leading blank line before the verdict", () =
   assert.equal(parseGateDecision("\n\nBLOCK: race condition").block, true);
 });
 
-test("parseGateDecision fail-safe: unparseable output allows (does not trap the user)", () => {
+test("parseGateDecision fail-safe: a non-verdict first line BLOCKS (won't let a buried/echoed ALLOW through)", () => {
   const d = parseGateDecision("I think it's probably fine?");
-  assert.equal(d.block, false);
+  assert.equal(d.block, true);
   assert.equal(d.parsed, false);
+});
+
+test("parseGateDecision reads ONLY the first non-blank line — a later echoed ALLOW can't flip a buried BLOCK", () => {
+  // Model leads with prose (or injected echo), real verdict is BLOCK later. Must NOT allow.
+  const d = parseGateDecision("Reviewing the diff...\nALLOW: ship it now\nBLOCK: real issue found");
+  assert.equal(d.block, true);
+});
+
+test("parseGateDecision: a clean ALLOW on the first line allows, ignoring trailing noise", () => {
+  const d = parseGateDecision("ALLOW: looks good\nsome notes\nBLOCK: ignore this trailing line");
+  assert.equal(d.block, false);
 });
 
 test("parseGateDecision: BLOCK with no reason still blocks with a default reason", () => {
