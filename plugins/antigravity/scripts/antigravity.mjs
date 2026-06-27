@@ -140,11 +140,11 @@ function runAgyTask(parsed, { kind, title, prompt, readOnly, resume }) {
   const cwd = process.cwd();
 
   const sandbox = hasFlag(parsed, "sandbox") || Boolean(readOnly);
-  // Read-only invocations (review / adversarial-review / --read-only) must NEVER auto-approve
-  // tool permissions — otherwise a "read-only" run still sends --dangerously-skip-permissions
-  // and containment would depend on agy's undocumented flag precedence. Write paths
-  // (delegate/resume) stay write-capable by default; --no-yolo opts out.
-  const yolo = readOnly ? false : !hasFlag(parsed, "no-yolo");
+  // Read-only and sandboxed invocations must NEVER auto-approve tool permissions —
+  // otherwise --dangerously-skip-permissions would void the sandbox guarantee if agy
+  // gives it precedence over --sandbox. Write paths (delegate/resume without --sandbox)
+  // stay write-capable by default; --no-yolo opts out.
+  const yolo = (readOnly || sandbox) ? false : !hasFlag(parsed, "no-yolo");
   const continueLast = resume && !parsed.valued.conversation ? true : hasFlag(parsed, "continue");
   const conversationId = parsed.valued.conversation || null;
   const printTimeout = parsed.valued["print-timeout"] || "10m";
