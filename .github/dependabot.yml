@@ -4,6 +4,10 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    # Wait 7 days before proposing updates to newly published action versions —
+    # defense-in-depth against supply-chain attacks that poison then retract a release.
+    cooldown:
+      default-days: 7
     commit-message:
       prefix: "ci"
     # One grouped PR for all action bumps (avoids conflicting per-action PRs).
