@@ -41,7 +41,7 @@ export function buildGatePrompt(target, lastAssistantMessage) {
 
 /**
  * Parse agy's gate output. Lenient: scans for the first line that starts with
- * ALLOW: or BLOCK: (Gemini sometimes adds a blank line first). Fail-safe: anything
+ * ALLOW: or BLOCK: (agy sometimes adds a blank line first). Fail-safe: anything
  * that is not an explicit BLOCK is treated as ALLOW — a broken/garbled gate must never
  * trap the user at the end of a turn.
  *

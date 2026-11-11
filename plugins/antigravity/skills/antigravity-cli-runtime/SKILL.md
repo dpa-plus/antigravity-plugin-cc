@@ -14,7 +14,7 @@ Internal contract for the `antigravity:antigravity-pair` subagent. Not user-faci
 node "${CLAUDE_PLUGIN_ROOT}/scripts/antigravity.mjs" delegate "<task>" [flags]
 ```
 
-`delegate` hands the task to Google's Antigravity CLI (`agy`, Gemini 3.5) non-interactively via `agy -p`. It is **write-capable by default** — it can edit files and run commands in this repo. Contain it with `--read-only` or `--sandbox` when the task should not mutate the working tree.
+`delegate` hands the task to Google's Antigravity CLI non-interactively via `agy -p`. It is **write-capable by default** — it can edit files and run commands in this repo. Contain it with `--read-only` or `--sandbox` when the task should not mutate the working tree.
 
 ## The one rule: thin forwarder
 
@@ -41,7 +41,7 @@ The companion owns binary detection, sandboxing, timeouts, the conversation id, 
 
 ## Model selection (`--model`)
 
-`agy` 1.0.8+ accepts `--model <label>`. Models are referenced by **label** (e.g. `Gemini 3.5 Flash (High)`; list them with `agy models`). The companion probes `agy --help` (`agySupportsModel`) and passes `--model` through when supported, warning + ignoring it on older builds (≤1.0.3) where the model is instead chosen with `/model` inside the TUI and persisted in `settings.json`. Forward a caller-supplied `--model`; don't invent one. Note: agy silently ignores an unknown label (it falls back to the default), so pass a label from `agy models`.
+`agy` 1.0.8+ accepts `--model <label>`. Models are referenced by **label** (list them with `agy models`) list them with `agy models`). The companion probes `agy --help` (`agySupportsModel`) and passes `--model` through when supported, warning + ignoring it on older builds (≤1.0.3) where the model is instead chosen with `/model` inside the TUI and persisted in `settings.json`. Forward a caller-supplied `--model`; don't invent one. Note: agy silently ignores an unknown label (it falls back to the default), so pass a label from `agy models`.
 
 ## Other subcommands (not for this subagent)
 

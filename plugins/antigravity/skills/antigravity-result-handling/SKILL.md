@@ -10,16 +10,16 @@ The companion (`scripts/antigravity.mjs`) wraps the `agy` binary and returns Mar
 
 Two things to remember before anything else:
 
-- **`delegate` is write-capable.** Unless the call used `--read-only` or `--sandbox`, Antigravity (Gemini 3.5) may have already edited files or run commands in the repo. Changes can be on disk right now. Verify with `git diff` / `git status` before you describe or trust them.
+- **`delegate` is write-capable.** Unless the call used `--read-only` or `--sandbox`, Antigravity may have already edited files or run commands in the repo. Changes can be on disk right now. Verify with `git diff` / `git status` before you describe or trust them.
 - **Every finished response carries a conversation id footer.** That id is what enables `/antigravity:resume` and the raw `agy --conversation <id>`. Always surface it when present.
 
 ---
 
 ## Case 1 — Normal response
 
-The common case: Gemini 3.5 answered.
+The common case: Antigravity answered.
 
-1. **Lead with Gemini's answer.** Put the substance first. Don't bury it under your own preamble or restate the contract. The developer asked Antigravity a question — give them the answer.
+1. **Lead with Antigravity's answer.** Put the substance first. Don't bury it under your own preamble or restate the contract. The developer asked Antigravity a question — give them the answer.
 2. **If it touched files, verify before you summarize.** Run `git diff` (or `git status` for new/deleted files) and describe what actually changed, not what the output claims changed. If the diff is large, summarize by file and intent. If a change looks wrong or risky, say so plainly and point at the exact hunk.
 3. **If it ran commands**, note what ran and the outcome.
 4. **Surface the conversation id footer.** Tell the developer they can continue this thread with `/antigravity:resume` (or `agy --conversation <id>` directly). This matters most when the task is half-done or worth iterating on.
@@ -40,7 +40,7 @@ When you see this:
 
 - Tell the developer their Antigravity quota is exhausted, and quote the reset window (`Resets in <dur>`).
 - Offer the realistic options: **wait** for the reset, or **switch to another Google account** and re-auth (`! agy`, then `/model` if needed).
-- Make clear **Claude can keep working in the meantime** — the quota limit is on Antigravity/Gemini, not on you. Don't stall the developer waiting on a second model.
+- Make clear **Claude can keep working in the meantime** — the quota limit is on Antigravity, not on you. Don't stall the developer waiting on a second model.
 
 There is no API key and no paid override for the preview tier, so don't suggest one.
 

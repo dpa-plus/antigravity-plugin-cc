@@ -1,10 +1,10 @@
 # 🛰️ Antigravity plugin for Claude Code
 
 <p align="center">
-  <img src="./assets/banner.png" alt="Claude Code × Antigravity — drive Google's agy CLI (Gemini 3.5) without leaving Claude Code" width="100%">
+  <img src="./assets/banner.png" alt="Claude Code × Antigravity — drive Google's agy CLI without leaving Claude Code" width="100%">
 </p>
 
-> **A second model inside Claude Code.** Hand a diff or a task to Google's Antigravity CLI (`agy`, Gemini 3.5) and get the answer back — without leaving your session.
+> **A second model inside Claude Code.** Hand a diff or a task to Google's Antigravity CLI and get the answer back — without leaving your session.
 
 [![CI](https://github.com/dpa-plus/antigravity-plugin-cc/actions/workflows/ci.yml/badge.svg)](https://github.com/dpa-plus/antigravity-plugin-cc/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/dpa-plus/antigravity-plugin-cc?sort=semver&color=6E56CF)](https://github.com/dpa-plus/antigravity-plugin-cc/releases)
@@ -12,7 +12,7 @@
 [![Node ≥18](https://img.shields.io/badge/node-%E2%89%A518-339933.svg)](./package.json)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/dpa-plus/antigravity-plugin-cc/pulls)
 
-**For Claude Code users who want Gemini 3.5 as a second opinion or a second pair of hands** — code review, adversarial review, delegated tasks, and an optional "don't let me ship a bug" gate. The Antigravity counterpart to [`openai/codex-plugin-cc`](https://github.com/openai/codex-plugin-cc). No API key, no new account — just your local `agy` login.
+**For Claude Code users who want a second model for a second opinion or a second pair of hands** — code review, adversarial review, delegated tasks, and an optional "don't let me ship a bug" gate. The Antigravity counterpart to [`openai/codex-plugin-cc`](https://github.com/openai/codex-plugin-cc). No API key, no new account — just your local `agy` login.
 
 ---
 
@@ -21,7 +21,7 @@
 ```text
 $ /antigravity:review
 
-# 🛰️ Antigravity — review (Gemini 3.5)
+# 🛰️ Antigravity — review
 Verdict: needs work
 
 • Critical · cart.js:12 — checkout() passes `percent = undefined` when there's no coupon,
@@ -41,14 +41,14 @@ Real output. A *different* model reviewing your diff catches what the model that
 |---|---|
 | **`/antigravity:review`** ⭐ | Read-only cross-model review of your diff (or a branch). `--json` for structured output. |
 | **`/antigravity:adversarial-review`** | Skeptical red-team review — *should this ship at all?* |
-| **`/antigravity:delegate`** ⭐ | Hand a task to Gemini 3.5 (write-capable; `--read-only` / `--sandbox` to contain it). |
+| **`/antigravity:delegate`** ⭐ | Hand a task to Antigravity (write-capable; `--read-only` / `--sandbox` to contain it). |
 | **`/antigravity:resume`** | Continue the last conversation with a follow-up. |
 | **`/antigravity:setup`** | Check `agy` is installed + signed in; toggle the review gate. |
 | **`/antigravity:status` · `result` · `cancel`** | Manage background jobs. |
 
 **Flags:** `--background` (detach into a tracked job) · `--wait` (block for the result) · `--model <label>` · `--json`
 
-**⭐ Opt-in review gate** — turn it on and Gemini reviews *every code-changing turn* before Claude can stop, blocking on real issues. A cross-model safety net. Off by default; fails safe.
+**⭐ Opt-in review gate** — turn it on and Antigravity reviews *every code-changing turn* before Claude can stop, blocking on real issues. A cross-model safety net. Off by default; fails safe.
 
 ---
 
@@ -88,7 +88,7 @@ agy
 /antigravity:review security and edge cases  # steer the focus
 /antigravity:review --json                   # structured JSON output
 ```
-Read-only and sandboxed — Gemini reads the diff, it never touches your files.
+Read-only and sandboxed — Antigravity reads the diff, it never touches your files.
 
 ### Challenge the change
 ```text
@@ -122,7 +122,7 @@ Write-capable by default — it can edit files and run commands. Add `--read-onl
 /antigravity:setup --disable-gate     # turn it off
 ```
 
-When **on**, every time Claude tries to end a turn that changed code, Gemini reviews the diff and **blocks the stop if it finds a real issue** — so a second model signs off before you move on.
+When **on**, every time Claude tries to end a turn that changed code, Antigravity reviews the diff and **blocks the stop if it finds a real issue** — so a second model signs off before you move on.
 
 **Fails safe:** if `agy` is missing, rate-limited, times out, or returns anything unclear, it lets you stop — it can never trap you. Hard kill-switch: `ANTIGRAVITY_CC_NO_GATE=1`.
 
@@ -142,7 +142,7 @@ A thin, zero-dependency Node companion drives `agy -p` and smooths the rough edg
 
 ## Privacy
 
-`delegate` / `review` send your working-directory contents and diffs to **Google's Antigravity** (`agy`, Gemini 3.5) under **your own** Google account — that's the second model at work. No servers, no telemetry, nothing sent anywhere else. `ANTIGRAVITY_CC_AGY_BIN` runs whatever binary it points at, so set it only to a trusted path.
+`delegate` / `review` send your working-directory contents and diffs to **Google's Antigravity** under **your own** Google account — that's the second model at work. No servers, no telemetry, nothing sent anywhere else. `ANTIGRAVITY_CC_AGY_BIN` runs whatever binary it points at, so set it only to a trusted path.
 
 ---
 
@@ -159,4 +159,4 @@ A thin, zero-dependency Node companion drives `agy -p` and smooths the rough edg
 
 A [**dpa-plus**](https://github.com/dpa-plus) project, inspired by [`openai/codex-plugin-cc`](https://github.com/openai/codex-plugin-cc). Licensed [MIT](./LICENSE). PRs welcome — see [CONTRIBUTING](./CONTRIBUTING.md) and [SECURITY](./SECURITY.md).
 
-Independent project. Not affiliated with, endorsed by, or sponsored by Google or Anthropic. "Antigravity", "Gemini", and "Claude Code" belong to their respective owners.
+Independent project. Not affiliated with, endorsed by, or sponsored by Google or Anthropic. "Antigravity", and "Claude Code" belong to their respective owners.

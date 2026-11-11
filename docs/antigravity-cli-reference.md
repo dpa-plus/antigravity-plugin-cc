@@ -9,9 +9,9 @@
 ## What `agy` is
 
 The **Antigravity CLI** (binary: **`agy`**) is the terminal surface of Google
-Antigravity 2.0, powered by the Gemini 3.5 agent harness. It shares config, auth,
-and the agent core with the Antigravity IDE. It descends from Gemini CLI — config
-lives under `~/.gemini/antigravity-cli/`.
+Antigravity 2.0, powered by Google's agent harness. It shares config, auth,
+and the agent core with the Antigravity IDE. It descends from an earlier Google CLI — config
+lives under `~/.gemini/antigravity-cli/` (a legacy directory name).
 
 ## Install
 
@@ -63,7 +63,7 @@ From `agy --help` (verbatim flag set, v1.0.3):
 Subcommands: `changelog`, `help`, `install`, `plugin`/`plugins`, `update`.
 
 **`--model <label>` (agy 1.0.8+).** Models are referenced by label (e.g.
-`Gemini 3.5 Flash (High)`; list them with `agy models`). The companion probes
+`<model label>`; list them with `agy models`). The companion probes
 `agy --help` (`agySupportsModel`) and passes `--model` through when supported, warning +
 ignoring it on older builds (≤1.0.3, which have no such flag — there the model is chosen
 with `/model` inside the TUI and persisted in `settings.json`). Note: agy silently ignores
@@ -84,7 +84,7 @@ an *unknown* label and falls back to its default, so pass a label that `agy mode
    - `RESOURCE_EXHAUSTED (code 429): Individual quota reached. ... Resets in <dur>` → quota exhausted.
    - auth / `UNAUTHENTICATED` / `login` → not signed in.
    - `agent executor error: ...` → generic backend failure.
-5. **Default model** (no override) is `Gemini 3.5 Flash`.
+5. **Default model** (no override) is whatever the CLI ships as its default.
 
 ## Config layout
 

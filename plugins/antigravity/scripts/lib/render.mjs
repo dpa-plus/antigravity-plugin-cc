@@ -94,7 +94,7 @@ export function renderSetup(report) {
     `- version: ${report.version || "unknown"}`,
     `- config dir: ${report.configDir.detail}`,
     `- auth: ${report.auth.detail}`,
-    `- review gate: ${report.gate ? "on (Gemini reviews each turn before it can stop)" : "off"} — toggle with \`/antigravity:setup --enable-gate\` / \`--disable-gate\``,
+    `- review gate: ${report.gate ? "on (Antigravity reviews each turn before it can stop)" : "off"} — toggle with \`/antigravity:setup --enable-gate\` / \`--disable-gate\``,
     "",
   ];
   if (report.nextSteps.length) {
@@ -108,7 +108,7 @@ export function renderBackgroundStarted(job) {
   const lines = [
     `# 🛰️ Antigravity — started in background`,
     "",
-    `Job \`${job.id}\` (${job.kind}) is running with Gemini 3.`,
+    `Job \`${job.id}\` (${job.kind}) is running with Antigravity.`,
     job.title ? `Task: ${job.title}` : "",
     "",
     "Check on it:",

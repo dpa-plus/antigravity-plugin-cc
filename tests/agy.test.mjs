@@ -52,10 +52,10 @@ test("continueLast adds --continue", () => {
 });
 
 test("buildPrintArgs threads --model <label> before the prompt", () => {
-  const args = buildPrintArgs({ prompt: "p", model: "Gemini 3.5 Flash (High)", logFile: "/l" });
+  const args = buildPrintArgs({ prompt: "p", model: "Example Model (High)", logFile: "/l" });
   const i = args.indexOf("--model");
   assert.ok(i !== -1, "--model present");
-  assert.equal(args[i + 1], "Gemini 3.5 Flash (High)");
+  assert.equal(args[i + 1], "Example Model (High)");
   assert.ok(i < args.indexOf("-p"), "--model comes before -p");
 });
 

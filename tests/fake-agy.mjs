@@ -87,5 +87,5 @@ if (process.env.FAKE_AGY_REPLY) {
 }
 const echo = String(prompt || "").slice(0, 60).replace(/\s+/g, " ");
 const modelNote = model ? ` model=${model}.` : "";
-process.stdout.write(`Gemini 3 (fake) reply. I received: "${echo}".${modelNote} Verdict: looks good.\n`);
+process.stdout.write(`agy (fake) reply. I received: "${echo}".${modelNote} Verdict: looks good.\n`);
 process.exit(0);

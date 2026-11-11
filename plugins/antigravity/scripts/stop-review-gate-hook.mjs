@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Stop hook: opt-in cross-model review gate. When enabled, agy (Gemini 3.5) reviews the
+// Stop hook: opt-in cross-model review gate. When enabled, agy reviews the
 // working-tree diff of the turn that is ending; a BLOCK verdict blocks the stop so Claude
 // keeps working, an ALLOW lets it finish.
 //
@@ -87,7 +87,7 @@ function main() {
   const decision = parseGateDecision(text);
   if (decision.block) {
     return block(
-      `Antigravity (Gemini 3.5) review gate blocked stopping: ${decision.reason} ` +
+      `Antigravity review gate blocked stopping: ${decision.reason} ` +
         "Address it, or run `/antigravity:setup --disable-gate` (or set ANTIGRAVITY_CC_NO_GATE=1) to bypass.",
     );
   }
