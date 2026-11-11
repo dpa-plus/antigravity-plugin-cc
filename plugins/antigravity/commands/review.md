@@ -1,10 +1,10 @@
 ---
-description: Cross-model code review of your changes by Gemini 3.5 (read-only, contained).
+description: Cross-model code review of your changes by Antigravity (read-only, contained).
 argument-hint: "[--base <ref>] [--background] [--wait] [--json] [--model <label>] [focus text]"
 allowed-tools: Bash(node:*)
 ---
 
-Get a second pair of eyes on your work. This runs a **read-only** review of your current changes through Antigravity (Gemini 3.5) and brings the findings straight back into Claude Code. It is sandboxed — it reads the diff and reports, it never edits files or runs commands against your tree.
+Get a second pair of eyes on your work. This runs a **read-only** review of your current changes through Antigravity and brings the findings straight back into Claude Code. It is sandboxed — it reads the diff and reports, it never edits files or runs commands against your tree.
 
 Run the companion and present its output:
 
@@ -18,11 +18,11 @@ Then show the review verbatim, then add a one-line summary of the most important
 
 - **No `--base`** — reviews your **uncommitted changes** (working tree vs HEAD). This is the default and the common case.
 - **`--base <ref>`** — reviews `<ref>...HEAD` instead. Use `--base main` to review the whole branch, `--base HEAD~3` for the last three commits.
-- **Trailing focus text** — anything after the flags steers the review. Point Gemini at what you care about: `security`, `error handling`, `the new retry logic`, `concurrency bugs`.
+- **Trailing focus text** — anything after the flags steers the review. Point Antigravity at what you care about: `security`, `error handling`, `the new retry logic`, `concurrency bugs`.
 - **`--background`** — for large diffs, run it as a job and keep working. You get a job id back; check progress with `/antigravity:status` and pull the finished review with `/antigravity:result`.
 - **`--wait`** — run as a job but block until it finishes, then print the result.
-- **`--json`** — ask Gemini for a structured JSON review (matching `schemas/review-output.schema.json`) instead of prose. Best-effort.
-- **`--model <label>`** — pick the Gemini model for this run (e.g. `--model "Gemini 3.5 Pro"`); needs an agy build with `--model` support.
+- **`--json`** — ask Antigravity for a structured JSON review (matching `schemas/review-output.schema.json`) instead of prose. Best-effort.
+- **`--model <label>`** — pick the model for this run (e.g. `--model "<label>"`; see `agy models`); needs an agy build with `--model` support.
 
 ## Examples
 
@@ -34,8 +34,8 @@ Then show the review verbatim, then add a one-line summary of the most important
 
 ## Notes
 
-- The review is contained and read-only — Gemini sees the git diff embedded in the prompt and reports back. Nothing in your repo changes.
+- The review is contained and read-only — Antigravity sees the git diff embedded in the prompt and reports back. Nothing in your repo changes.
 - Antigravity is in preview with a quota. If the review comes back empty, you're likely rate-limited — the companion surfaces the reset time when it can. Wait it out and rerun.
 - First time? You need to be signed in to Antigravity once. Run `/antigravity:setup` to check, and if it reports you're not authed, type `! agy` to do the one-time Google OAuth in your browser.
 
-_Powered by Google Antigravity (`agy`, Gemini 3.5). A dpa-plus plugin._
+_Powered by Google Antigravity. A dpa-plus plugin._

@@ -2,6 +2,11 @@
 
 All notable changes to the `antigravity` plugin are documented here.
 
+## [Unreleased]
+
+### Changed
+- Wording only: docs, command/agent/skill text, manifests, and printed output no longer name a specific model; they refer to Antigravity (`agy`) or "a second model". The `gemini-3-prompting` skill was renamed to `antigravity-prompting` to be model-neutral. No behaviour change: `--model` and all `agy` invocations are unchanged.
+
 ## [0.3.0] — 2026-06-15
 
 Public-readiness hardening (security + parity), informed by a multi-agent audit and an independent Codex review.

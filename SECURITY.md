@@ -16,7 +16,7 @@ We aim to acknowledge within a few days.
 
 ## Scope & threat model
 
-This plugin drives the local `agy` (Antigravity / Gemini) CLI from Claude Code on the
+This plugin drives the local `agy` (Antigravity) CLI from Claude Code on the
 user's own machine, under the user's own credentials. Relevant hardening already in place:
 
 - The opt-in **stop-review gate** and the review prompts wrap untrusted diffs in

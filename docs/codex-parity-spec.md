@@ -1,7 +1,7 @@
 # Spec: codex-plugin-cc parity for Antigravity
 
 Status: approved (2026-06-14). Base: the upstream antigravity-plugin-cc @ v0.1.0.
-Goal: bring this Antigravity (`agy` / Gemini 3.5) companion to feature parity with OpenAI's
+Goal: bring this Antigravity (`agy`) companion to feature parity with OpenAI's
 `codex-plugin-cc`, so it behaves like the Codex plugin but drives `agy` instead.
 
 ## Context / ground truth (verified on agy 1.0.8, macOS arm64)
@@ -9,7 +9,7 @@ Goal: bring this Antigravity (`agy` / Gemini 3.5) companion to feature parity wi
 - `agy -p "<prompt>"` prints the model response to **stdout** correctly (the old headless
   empty-stdout bug is gone on 1.0.8).
 - `agy --model <value>` **is** a real flag. Models are referenced by **label**
-  (`settings.json` → `"model": "Gemini 3.5 Flash (High)"`). There is **no** `--effort` flag.
+  (`settings.json` → `"model": "<model label>"`). There is **no** `--effort` flag.
 - `agy models` was observed to **hang** in a non-TTY on 1.0.8 (no output; had to be killed); it reportedly exits cleanly on 1.0.9. Treat it as unreliable across builds — the companion does not depend on it, and an unknown `--model` label is silently ignored by agy (falls back to the default).
 - Conversation id appears in `--log-file` as `Created conversation <uuid>` and
   `Print mode: conversation=<uuid>` — `logscan` already extracts both. ✅ still valid.

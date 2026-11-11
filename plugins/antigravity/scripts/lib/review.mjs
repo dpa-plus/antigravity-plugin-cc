@@ -1,5 +1,5 @@
 // Prompt builders for code review. Pure functions, unit-tested. Each embeds the
-// git diff (resolved by lib/git.mjs) and asks agy (Gemini) to review it read-only.
+// git diff (resolved by lib/git.mjs) and asks agy to review it read-only.
 //
 // With { json: true } the prompt asks for a single JSON object matching
 // schemas/review-output.schema.json (best-effort structured output, parity with

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // Antigravity companion for Claude Code.
 //
-// Thin, dependency-free runtime that drives the `agy` CLI (Google Antigravity,
-// Gemini 3) in print mode and manages background jobs. Each subcommand prints
+// Thin, dependency-free runtime that drives the `agy` CLI (Google Antigravity)
+// in print mode and manages background jobs. Each subcommand prints
 // Markdown that the calling slash command / subagent relays to the user verbatim.
 //
 // Subcommands: setup | delegate | review | resume | status | result | cancel
@@ -245,7 +245,7 @@ function runAgyTask(parsed, { kind, title, prompt, readOnly, resume }) {
 function cmdDelegate(parsed) {
   const task = parsed.text;
   if (!task) {
-    out("# 🛰️ Antigravity — delegate\n\nWhat should Antigravity (Gemini 3) work on? Pass the task, e.g.\n`/antigravity:delegate investigate why the auth tests fail and propose a fix`.");
+    out("# 🛰️ Antigravity — delegate\n\nWhat should Antigravity work on? Pass the task, e.g.\n`/antigravity:delegate investigate why the auth tests fail and propose a fix`.");
     return;
   }
   runAgyTask(parsed, { kind: "delegate", title: truncate(task, 80), prompt: task, readOnly: hasFlag(parsed, "read-only") });
@@ -441,7 +441,7 @@ function truncate(s, n) {
 function usage() {
   out(
     [
-      "antigravity companion — drive the Antigravity CLI (agy / Gemini 3) from Claude Code",
+      "antigravity companion — drive the Antigravity CLI from Claude Code",
       "",
       "Usage: node antigravity.mjs <subcommand> [args]",
       "  setup [--json]",

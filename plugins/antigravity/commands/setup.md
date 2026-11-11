@@ -1,5 +1,5 @@
 ---
-description: Check whether the Antigravity CLI (agy, Gemini 3.5) is installed and signed in, install it if missing, and toggle the stop-review-gate.
+description: Check whether the Antigravity CLI is installed and signed in, install it if missing, and toggle the stop-review-gate.
 argument-hint: '[--json] [--enable-gate | --disable-gate]'
 allowed-tools: Bash(node:*), Bash(curl:*), Bash(bash:*), AskUserQuestion
 ---
@@ -16,7 +16,7 @@ Read the JSON: `{ ready, installed, binaryPath, version, authedGuess, configDir,
 
 `--enable-gate` / `--disable-gate` turn the optional stop-review-gate on or off (persisted in
 `~/.antigravity-cc/config.json`). When **on**, every time Claude tries to finish a turn that
-changed code, Antigravity (Gemini 3.5) reviews the working-tree diff and can **block** stopping
+changed code, Antigravity reviews the working-tree diff and can **block** stopping
 until issues are addressed — a cross-model safety net. It is **off by default**. It fails safe:
 if agy is missing, rate-limited, times out, or returns anything that isn't an explicit `BLOCK`,
 the stop is allowed. Hard kill-switch: `ANTIGRAVITY_CC_NO_GATE=1`.

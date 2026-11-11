@@ -3,7 +3,7 @@
   "version": "0.3.0",
   "private": true,
   "type": "module",
-  "description": "Use Google Antigravity (agy / Gemini 3.5) from inside Claude Code with codex-plugin-cc parity: delegate, review, adversarial-review, stop-review-gate, --model, --wait.",
+  "description": "Use Google Antigravity from inside Claude Code with codex-plugin-cc parity: delegate, review, adversarial-review, stop-review-gate, --model, --wait.",
   "license": "MIT",
   "author": "dpa-plus (https://github.com/dpa-plus)",
   "homepage": "https://github.com/dpa-plus/antigravity-plugin-cc",
@@ -21,7 +21,6 @@
   "keywords": [
     "antigravity",
     "agy",
-    "gemini-3",
     "claude-code",
     "plugin",
     "code-review",

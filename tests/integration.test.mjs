@@ -54,7 +54,7 @@ test("setup --json reports ready when the (fake) binary resolves", () => {
 
 test("delegate (foreground success) returns the model response + conversation id", () => {
   const { stdout } = run(["delegate", "summarize the repo"], { mode: "success" });
-  assert.match(stdout, /Gemini 3 \(fake\) reply/);
+  assert.match(stdout, /agy \(fake\) reply/);
   assert.match(stdout, /summarize the repo/);
   assert.match(stdout, /Antigravity conversation:/);
   assert.match(stdout, /abcd1234-ef56-7890-abcd-1234567890ef/);
@@ -73,8 +73,8 @@ test("delegate surfaces an auth error with sign-in guidance", () => {
 });
 
 test("delegate --model passes the model through to agy (when supported)", () => {
-  const { stdout } = run(["delegate", "hello", "--model", "Gemini 3.5 Pro"], { mode: "success" });
-  assert.match(stdout, /model=Gemini 3\.5 Pro/);
+  const { stdout } = run(["delegate", "hello", "--model", "Example Model"], { mode: "success" });
+  assert.match(stdout, /model=Example Model/);
 });
 
 test("empty output (exit 0, no response, no log error) is surfaced as a failure, not success", () => {
@@ -128,13 +128,13 @@ test("/antigravity:result returns a finished FOREGROUND job's output (output.txt
   const env = { ...process.env, ANTIGRAVITY_CC_AGY_BIN: FAKE_AGY, ANTIGRAVITY_CC_HOME: home, FAKE_AGY_MODE: "success" };
   execFileSync("node", [COMPANION, "delegate", "remember this"], { cwd, env, encoding: "utf8" });
   const result = execFileSync("node", [COMPANION, "result"], { cwd, env, encoding: "utf8" });
-  assert.match(result, /Gemini 3 \(fake\) reply/);
+  assert.match(result, /agy \(fake\) reply/);
   assert.match(result, /remember this/);
 });
 
 test("delegate --wait returns the result inline (synchronous foreground)", () => {
   const { stdout } = run(["delegate", "wait for me", "--wait"], { mode: "success" });
-  assert.match(stdout, /Gemini 3 \(fake\) reply/);
+  assert.match(stdout, /agy \(fake\) reply/);
   assert.match(stdout, /wait for me/);
 });
 
@@ -144,7 +144,7 @@ test("delegate --background returns a job id immediately, --wait overrides to fo
   assert.match(bg.stdout, /agy-/);
   // --wait wins over --background: result comes back inline, no "started in background"
   const both = run(["delegate", "now", "--background", "--wait"], { mode: "success" });
-  assert.match(both.stdout, /Gemini 3 \(fake\) reply/);
+  assert.match(both.stdout, /agy \(fake\) reply/);
   assert.doesNotMatch(both.stdout, /started in background/i);
 });
 
@@ -157,7 +157,7 @@ test("adversarial-review runs against a working-tree diff with skeptical framing
     FAKE_AGY_MODE: "success",
   };
   const stdout = execFileSync("node", [COMPANION, "adversarial-review"], { cwd, env, encoding: "utf8" });
-  assert.match(stdout, /Gemini 3 \(fake\) reply/);
+  assert.match(stdout, /agy \(fake\) reply/);
   assert.doesNotMatch(stdout, /Nothing to review/);
   // fake-agy echoes the leading prompt text, which proves the adversarial prompt was sent
   assert.match(stdout, /ADVERSARIAL/);
